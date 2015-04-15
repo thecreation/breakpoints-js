@@ -9,7 +9,7 @@
     "use strict";
 
     var Breakpoints = $.breakpoints = function() {
-        Breakpoints.define.apply(this, arguments);
+        Breakpoints.define.apply(Breakpoints, arguments);
     };
 
     Breakpoints.defaults = {
@@ -35,7 +35,7 @@
         }
     };
 
-    var mediaQuery = Breakpoints.mediaQuery = {
+    var MediaBuilder = Breakpoints.mediaBuilder = {
         min: function (min) {
             return '(min-width: ' + min + 'px)';
         },
@@ -56,20 +56,60 @@
         }
     };
 
-    var Breakpoint = function(){
-        return this.initialize.apply(this, Array.prototype.slice.call(arguments));
+    var Listeners = function () {
+        var list = [];
+
+        return {
+            length: 0,
+            add: function (callback, data, one) {
+                list.push({
+                    callback: callback,
+                    data: data || {},
+                    one: one || false
+                });
+                this.length ++;
+            },
+            process: function (caller) {
+                var listener, deletes = [];
+
+                for (var i = 0, len = list.length; i < len; i++) {
+                    listener = list[i];
+
+                    if (typeof(listener.callback) === 'function') {
+                        listener.callback.call(caller || window, listener.data);
+                    }
+
+                    if(listener.one){
+                        deletes.push(i);
+                    }
+                }
+
+                while (deletes.length !== 0) {
+                    list.splice(deletes.pop(), 1);
+                    this.length --;
+                }
+            },
+            remove: function(callback) {
+                for (var i = 0; i < list.length; i++) {
+                    if (list[i].callback === callback) {
+                        list.splice(i, 1);
+                        this.length --;
+                        i--;
+                    }
+                }
+            }
+        };
+    };
+
+    var MediaQuery = Breakpoints.mediaBuilder = function(name, media){
+        this.name = name;
+        this.media = media;
+
+        return this.initialize.apply(this);
     }
 
-    $.extend(Breakpoint.prototype, {
-        listeners: {
-            enter:[],
-            leave:[]
-        },
-        initialize: function(name, min, max) {
-            this.name = name;
-            this.min = min? min: 0;
-            this.max = max? max: Infinity;
-            this.media = mediaQuery.get(this.min, this.max);
+    $.extend(MediaQuery.prototype, {
+        initialize: function(){
             this.mql =  (window.matchMedia && window.matchMedia(this.media)) || {
                 matches         : false,
                 media           : this.media,
@@ -77,23 +117,28 @@
                 removeListener  : function() {}
             };
             this.mql.addListener(this._handleListener);
+
+            this.listeners = {
+                enter: new Listeners(),
+                leave: new Listeners()
+            };
         },
 
-        on: function(types, data, fn, /*INTERNAL*/ one){
+        on: function(types, data, callback, /*INTERNAL*/ one){
 
             return this;
         },
 
-        one: function(types, data, fn){
+        one: function(types, data, callback){
 
             return this;
         },
 
-        off: function(types, fn){
+        off: function(types, callback){
             return this;
         },
 
-        match: function(){
+        isMatched: function(){
             return this.mql.matches;
         },
 
@@ -102,7 +147,18 @@
         }
     });
 
-    var listeners = {};
+    var Size = function(name, min, max){
+        this.name = name;
+        this.min = min? min: 0;
+        this.max = max? max: Infinity;
+
+        this.media = MediaBuilder.get(this.min, this.max);
+
+        return this.initialize.apply(this);
+    }
+
+    Size.prototype = $.extend({}, MediaQuery.prototype, Size.prototype);
+
     var sizes = {};
 
     $.extend(Breakpoints, {
@@ -112,9 +168,10 @@
             }
 
             sizes = {};
-            $.each(breakpoints, function(name, value){
-                sizes[name] = new Breakpoint(name, value.min || null, value.max || null);
-            });
+
+            for(var size in breakpoints){
+                this.set(size, breakpoints[size].min, breakpoints[size].max);
+            }
         },
 
         is: function(size) {
@@ -123,12 +180,16 @@
                 return null;
             }
 
-            return breakpoint.match();
+            return breakpoint.isMatched();
         },
 
         /* get all sizes */
         all: function() {
             return sizes;
+        },
+
+        set: function(name, min, max) {
+            sizes[name] = new Size(name, min || null, max || null);
         },
 
         get: function(size){
@@ -157,7 +218,7 @@
         current: function() {
             var matches = [];
             $.each(sizes, function(size, breakpoint){
-                if(breakpoint.match()){
+                if(breakpoint.isMatched()){
                     matches.push(breakpoint);
                 }
             });
@@ -179,19 +240,19 @@
             return null;
         },
 
-        on: function(sizes, types, data, fn, /*INTERNAL*/ one) {
+        on: function(sizes, types, data, callback, /*INTERNAL*/ one) {
             var type;
         },
 
-        one: function(sizes, types, data, fn) {
-            return this.on( sizes, types, data, fn, 1 );
+        one: function(sizes, types, data, callback) {
+            return this.on( sizes, types, data, callback, 1 );
         },
 
-        off: function(sizes, types, fn) {
+        off: function(sizes, types, callback) {
 
         },
         
-        change: function(fn){
+        change: function(callback){
 
         }
     });
