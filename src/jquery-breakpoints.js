@@ -62,11 +62,12 @@
         return {
             length: 0,
             add: function (callback, data, one) {
-                list.push({
+                this.push({
                     callback: callback,
                     data: data || {},
                     one: one || 0
                 });
+                
                 this.length ++;
             },
             remove: function(callback) {
@@ -78,30 +79,34 @@
                     }
                 }
             },
+            clear: function() {
+                list = [];
+                this.length = 0;
+            },
+            fire: function (i) {
+                if(!i) {
+                    i = this.length - 1;
+                }
+                var listener = list[i];
+                if ($.isFunction(listener.callback)) {
+                        listener.callback.call(caller || window, listener.data);	
+                }
+                if(listener.one){
+                    delete list[i];
+                    this.length --;
+                }
+            },
             process: function (caller) {
                 var listener, deletes = [];
 
-                for (var i = 0, len = list.length; i < len; i++) {
-                    listener = list[i];
-
-                    if ($.isFunction(listener.callback)) {
-                        listener.callback.call(caller || window, listener.data);
-                    }
-
-                    if(listener.one){
-                        deletes.push(i);
-                    }
-                }
-
-                while (deletes.length !== 0) {
-                    list.splice(deletes.pop(), 1);
-                    this.length --;
+                for(var i in list){
+                    this.fire(i); 
                 }
             }
         };
     };
 
-    var MediaQuery = Breakpoints.mediaBuilder = function(name, media){
+    var MediaQuery = Breakpoints.mediaQuery = function(name, media){
         this.name = name;
         this.media = media;
 
@@ -151,6 +156,9 @@
 
             if(types in this.listeners){
                 this.listeners[types].add(callback, data, one);
+                if(this.isMatched() && types === 'enter') {
+                    this.listeners[types].fire();
+               }
             }
 
             return this;
@@ -170,16 +178,14 @@
             }
 
             if(types == null){
-                this.listeners = {
-                    enter: new Listeners(),
-                    leave: new Listeners()
-                };
+                this.listeners.enter.clear();
+                this.listeners.leave.clear();
             }
             if(types in this.listeners){
                 if(callback){
                     this.listeners[types].remove(callback);
                 } else {
-                    this.listeners[types] = new Listeners();
+                    this.listeners[types].clear();
                 }
             }
             
@@ -198,10 +204,21 @@
 
         this.media = MediaBuilder.get(this.min, this.max);
 
-        return this.initialize.apply(this);
+        this.initialize.apply(this);
+      
+        var self = this;
+        this.changeHandler = function(mql){
+        $(window).trigger('sizeChange.breakpoints', self);
+    };
+        this.mql.addListener(this.changeHandler);
     }
 
-    Size.prototype = $.extend({}, MediaQuery.prototype, Size.prototype);
+    Size.prototype = $.extend({}, MediaQuery.prototype, Size.prototype, {
+        destory: function(){
+            this.off();
+            this.mql.removeListener(this.changeHander);
+        }
+    });
 
     var sizes = {};
 
