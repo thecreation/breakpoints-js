@@ -65,9 +65,18 @@
                 list.push({
                     callback: callback,
                     data: data || {},
-                    one: one || false
+                    one: one || 0
                 });
                 this.length ++;
+            },
+            remove: function(callback) {
+                for (var i = 0; i < list.length; i++) {
+                    if (list[i].callback === callback) {
+                        list.splice(i, 1);
+                        this.length --;
+                        i--;
+                    }
+                }
             },
             process: function (caller) {
                 var listener, deletes = [];
@@ -75,7 +84,7 @@
                 for (var i = 0, len = list.length; i < len; i++) {
                     listener = list[i];
 
-                    if (typeof(listener.callback) === 'function') {
+                    if ($.isFunction(listener.callback)) {
                         listener.callback.call(caller || window, listener.data);
                     }
 
@@ -87,15 +96,6 @@
                 while (deletes.length !== 0) {
                     list.splice(deletes.pop(), 1);
                     this.length --;
-                }
-            },
-            remove: function(callback) {
-                for (var i = 0; i < list.length; i++) {
-                    if (list[i].callback === callback) {
-                        list.splice(i, 1);
-                        this.length --;
-                        i--;
-                    }
                 }
             }
         };
@@ -110,40 +110,84 @@
 
     $.extend(MediaQuery.prototype, {
         initialize: function(){
+            this.listeners = {
+                enter: new Listeners(),
+                leave: new Listeners()
+            };
+
             this.mql =  (window.matchMedia && window.matchMedia(this.media)) || {
                 matches         : false,
                 media           : this.media,
                 addListener     : function() {},
                 removeListener  : function() {}
             };
-            this.mql.addListener(this._handleListener);
 
-            this.listeners = {
-                enter: new Listeners(),
-                leave: new Listeners()
+            var self = this;
+            this.mqlHandler = function(mql){
+                var type  = (mql.matches && 'enter') || 'leave';
+
+                self.listeners[type].process(self);
             };
+            this.mql.addListener(this.mqlHandler);
         },
 
         on: function(types, data, callback, /*INTERNAL*/ one){
+            var type;
+            if ( typeof types === "object" ) {
+                for ( type in types ) {
+                    this.on( type, data, types[ type ], one );
+                }
+                return this;
+            }
+
+            if( callback == null && $.isFunction(data) ){
+                callback = data;
+                data = undefined;
+            }
+
+            if (!$.isFunction(callback)) {
+                return this;
+            }
+
+            if(types in this.listeners){
+                this.listeners[types].add(callback, data, one);
+            }
 
             return this;
         },
 
         one: function(types, data, callback){
-
-            return this;
+            return this.on( types, data, callback, 1 );
         },
 
         off: function(types, callback){
+            var type;
+            if ( typeof types === "object" ) {
+                for ( type in types ) {
+                    this.off( type, types[ type ] );
+                }
+                return this;
+            }
+
+            if(types == null){
+                this.listeners = {
+                    enter: new Listeners(),
+                    leave: new Listeners()
+                };
+            }
+            if(types in this.listeners){
+                if(callback){
+                    this.listeners[types].remove(callback);
+                } else {
+                    this.listeners[types] = new Listeners();
+                }
+            }
+            
             return this;
         },
 
         isMatched: function(){
             return this.mql.matches;
-        },
-
-        _handleListener: function(){
-
         }
     });
 
@@ -160,6 +204,11 @@
     Size.prototype = $.extend({}, MediaQuery.prototype, Size.prototype);
 
     var sizes = {};
+
+
+    var parseSizes = function(string) {
+
+    };
 
     $.extend(Breakpoints, {
         define: function(breakpoints) {
@@ -241,7 +290,12 @@
         },
 
         on: function(sizes, types, data, callback, /*INTERNAL*/ one) {
-            var type;
+            var size = this.get(sizes);
+
+            if(size) {
+                size.on(types, data, callback, one);
+            }
+            return this;
         },
 
         one: function(sizes, types, data, callback) {
@@ -249,7 +303,12 @@
         },
 
         off: function(sizes, types, callback) {
+            var size = this.get(sizes);
 
+            if(size) {
+                size.off(types, callback);
+            }
+            return this;
         },
         
         change: function(callback){

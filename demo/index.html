@@ -3,21 +3,28 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Breakpoints</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>Breakpoints</title>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width">
 
-        <link rel="stylesheet" href="css/normalize.css">
-        <link rel="stylesheet" href="css/main.css">      
+<link rel="stylesheet" href="css/normalize.css">
+<link rel="stylesheet" href="css/main.css">      
 
-        <script src="../libs/jquery/jquery.js"></script>
-        <script src="js/jquery.toc.js"></script>
-        <script src="js/prism.js"></script>
-        <script src="../src/jquery-breakpoints.js"></script>
-    </head>
+<script src="../libs/jquery/jquery.js"></script>
+<script src="js/jquery.toc.js"></script>
+<script src="js/prism.js"></script>
+<script src="../src/jquery-breakpoints.js"></script>
+
+<script type="text/javascript">
+(function(){
+    $.breakpoints();
+})();
+</script>
+
+</head>
 <body>
 <!--[if lt IE 7]>
     <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
@@ -109,32 +116,93 @@
             });
         </script>
     </section>
+    <section>
+        <h3>on</h3>
+        <input type="radio" name="api-on" value="1" /> Enable</br>
+        <input type="radio" name="api-on" value="0" checked /> Disable</br>
+        <pre class="language-javascript"><code>&lt;script type=&quot;text/javascript&quot;&gt;
+    $.breakpoints.on('md', {
+        enter: function() {
+            console.info('enter '+ this.name);
+        },
+        leave: function() {
+            console.info('leave '+ this.name);
+        }
+    });
+
+    $.breakpoints.on('lg', 'enter', function(){
+        console.info('hello lg');
+    });
+&lt;/script&gt;</code></pre>
+
+<script type="text/javascript">
+    $('[name="api-on"]').on('change', function(e){
+        if($(this).val() === '1'){
+            $.breakpoints.on('md', {
+                enter: function() {
+                    console.info('enter '+ this.name);
+                },
+                leave: function() {
+                    console.info('leave '+ this.name);
+                }
+            });
+
+            $.breakpoints.on('lg', 'enter', function(){
+                console.info('hello lg');
+            });
+        } else {
+            $.breakpoints.off('md', 'enter');
+            $.breakpoints.off('md', 'leave');
+            $.breakpoints.off('lg');
+        }
+    });
+</script>
+
+        <h4>Passing data to the callback</h4>
+        <input type="radio" name="api-on-data" value="1" /> Enable</br>
+        <input type="radio" name="api-on-data" value="0" checked /> Disable</br>
+
+        <pre class="language-javascript"><code>
+&lt;script type=&quot;text/javascript&quot;&gt;
+$.breakpoints.on('sm', &quot;enter&quot;, {
+    name: &quot;Addy&quot;
+}, function(data) {
+    console.info(data.name + ' enter '+ this.name);
+});
+
+$.breakpoints.on('sm', &quot;leave&quot;, {
+    name: &quot;Karl&quot;
+}, function(data) {
+    console.info(data.name + ' leave '+ this.name);
+});
+&lt;/script&gt;</code></pre>
+
+<script type="text/javascript">
+    $('[name="api-on-data"]').on('change', function(e){
+        if($(this).val() === '1'){
+            $.breakpoints.on('sm', "enter", {
+                name: "Addy"
+            }, function(data) {
+                console.info(data.name + ' enter '+ this.name);
+            });
+
+            $.breakpoints.on('sm', "leave", {
+                name: "Karl"
+            }, function(data) {
+                console.info(data.name + ' leave '+ this.name);
+            });
+        } else {
+            $.breakpoints.off('sm');
+        }
+    });
+</script>
+    </section>
 </section>
 </div>
 <script>
 (function(){
     $('#toc').toc();
 })();
-
-$.breakpoints();
-
-// $.breakpoints.on('xs', {
-//     enter: function(){
-
-//     },
-//     leave: function(){
-
-//     }
-// });
-
-// $.breakpoints.one('sm md', 'match', function(){
-
-// })
-
-// $.breakpoints.change(function(size){
-
-// });
-
 </script>
 </body>
 </html>
