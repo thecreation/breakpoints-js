@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Breakpoints</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/main.css">      
+
+        <script src="../libs/jquery/jquery.js"></script>
+        <script src="js/jquery.toc.js"></script>
+        <script src="js/prism.js"></script>
+        <script src="../src/jquery-breakpoints.js"></script>
+    </head>
+<body>
+<!--[if lt IE 7]>
+    <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+<![endif]-->
+<div id="toc"></div>
+<div id="wrapper">
+<h1>Breakpoints</h1>
+<section>
+    <h2>Usage</h2>
+    <p>You can init the script easily by code <code class="language-javascript">$.breakpoints();</code>.</p>
+    <p>It will use the bootstrap media query breakpoints by default.</p>
+    <pre class="language-javascript"><code>Breakpoints.defaults = {
+        // Extra small devices (phones)
+        xs: {
+            min: 0,
+            max: 767
+        },
+        // Small devices (tablets
+        sm: {
+            min: 768,
+            max: 991
+        },
+        // Medium devices (desktops)
+        md: {
+            min: 992,
+            max: 1199,
+        },
+        // Large devices (large desktops)
+        lg: {
+            min: 1200,
+            max: Infinity
+        }
+};</code></pre>
+    
+    <p>You can set up your own settings:</p>
+    <pre class="language-javascript"><code>&lt;script type=&quot;text/javascript&quot;&gt;
+    $.breakpoints({
+        mobile: {
+            min: 0,
+            max: 767
+        },
+        tablet: {
+            min: 768,
+            max: 991
+        },
+        destop: {
+            min: 992,
+            max: Infinity
+        }
+    });
+&lt;/script&gt;</code></pre>
+
+</section>
+<section>
+    <h2>API</h2>
+    <section>
+        <h3>is</h3>
+        <p>Check if the current is a specific size.</p>
+        <button class="api-is" data-size="xs">$.breakpoints.is('xs')</button>
+        <button class="api-is" data-size="sm">$.breakpoints.is('sm')</button>
+        <button class="api-is" data-size="md">$.breakpoints.is('md')</button>
+        <button class="api-is" data-size="lg">$.breakpoints.is('lg')</button>
+
+        <script type="text/javascript">
+            $('.api-is').on('click', function(e){
+                var size = $(this).data('size');
+
+                var result = $.breakpoints.is(size);
+                if(result) {
+                    alert("it's "+size);
+                } else {
+                    alert("it's not "+size);
+                }
+            });
+        </script>
+    </section>
+    <section>
+        <h3>current</h3>
+        <button class="api-current">$.breakpoints.current()</button>
+        <script type="text/javascript">
+            $('.api-current').on('click', function(e){
+                var result = $.breakpoints.current();
+                if(result) {
+                    alert("Current size is " + result.name);
+                    console.dir(result);
+                } else {
+                    alert("There is no matched sizes.");
+                }
+            });
+        </script>
+    </section>
+</section>
+</div>
+<script>
+(function(){
+    $('#toc').toc();
+})();
+
+$.breakpoints();
+
+// $.breakpoints.on('xs', {
+//     enter: function(){
+
+//     },
+//     leave: function(){
+
+//     }
+// });
+
+// $.breakpoints.one('sm md', 'match', function(){
+
+// })
+
+// $.breakpoints.change(function(size){
+
+// });
+
+</script>
+</body>
+</html>

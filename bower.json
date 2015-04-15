@@ -1,0 +1,20 @@
+{
+  "name": "jquery-breakpoints",
+  "version": "0.1.0",
+  "main": "dist/jquery-breakpoints.js",
+  "copyright": "amazingSurge",
+  "license": "GPL",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "libs",
+    "package.json",
+    "Gruntfile.js",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": ">=1.8.3"
+  }
+}
