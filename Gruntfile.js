@@ -34,7 +34,7 @@ module.exports = function(grunt) {
                     'src/api.js',
                     'src/outro.js'
                 ],
-                dest: 'dist/<%= pkg.name %>.js'
+                dest: 'dist/Breakpoints.js'
             }
         },
 
@@ -45,7 +45,7 @@ module.exports = function(grunt) {
             },
             dist: {
                 src: '<%= concat.dist.dest %>',
-                dest: 'dist/<%= pkg.name %>.min.js'
+                dest: 'dist/Breakpoints.min.js'
             },
         },
 

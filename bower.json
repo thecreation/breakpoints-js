@@ -1,7 +1,7 @@
 {
-  "name": "jquery-breakpoints",
-  "version": "0.1.0",
-  "main": "dist/jquery-breakpoints.js",
+  "name": "Breakpoints.js",
+  "version": "0.2.0",
+  "main": "dist/Breakpoints.js",
   "copyright": "amazingSurge",
   "license": "GPL",
   "ignore": [

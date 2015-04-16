@@ -1,45 +1,34 @@
-/*! jQuery breakpoints - v0.1.0 - 2015-04-16
- * https://github.com/amazingSurge/jquery-breakpoints
+/*! Breakpoints.js - v0.2.0 - 2015-04-17
+ * https://github.com/amazingSurge/breakpoints.js
  * Copyright (c) 2015 amazingSurge; Licensed GPL */
-(function($, document, window, undefined) {
+(function(document, window, undefined) {
     "use strict";
 
-    var Breakpoints = $.breakpoints = function() {
+    var Breakpoints = window.Breakpoints = function() {
         Breakpoints.define.apply(Breakpoints, arguments);
     };
 
-    function isPercentage(n) {
-        return typeof n === 'string' && n.indexOf('%') != -1;
-    }
+    function each(obj, fn) {
+        var continues;
 
-    function isPx(n) {
-        return typeof n === 'string' && n.indexOf('px') != -1;
-    }
-
-    function convertMatrixToArray(value) {
-        if (value && (value.substr(0, 6) == "matrix")) {
-            return value.replace(/^.*\((.*)\)$/g, "$1").replace(/px/g, '').split(/, +/);
+        for (var i in obj) {
+            continues = fn(i, obj[i]);
+            if (continues === false) {
+                break; //allow early exit
+            }
         }
-        return false;
     }
 
-    function getHashCode(object) {
-        if (typeof object !== 'string') {
-            object = JSON.stringify(object);
-        }
-
-        var hash = 0,
-            i, chr, len;
-        if (object.length == 0) return hash;
-        for (i = 0, len = object.length; i < len; i++) {
-            chr = object.charCodeAt(i);
-            hash = ((hash << 5) - hash) + chr;
-            hash |= 0; // Convert to 32bit integer
-        }
-
-        return hash;
+    function isFunction(obj) {
+        return typeof obj == 'function' || false;
     }
 
+    function extend(obj, source) {
+        for (var property in source) {
+            obj[property] = source[property];
+        }
+        return obj;
+    }
     Breakpoints.defaults = {
         // Extra small devices (phones)
         xs: {
@@ -88,7 +77,7 @@
         return {
             length: 0,
             add: function(fn, data, one) {
-                this.push({
+                list.push({
                     fn: fn,
                     data: data || {},
                     one: one || 0
@@ -109,12 +98,12 @@
                 list = [];
                 this.length = 0;
             },
-            fire: function(i) {
+            fire: function(i, caller) {
                 if (!i) {
                     i = this.length - 1;
                 }
                 var callback = list[i];
-                if ($.isFunction(callback.fn)) {
+                if (isFunction(callback.fn)) {
                     callback.fn.call(caller || window, callback.data);
                 }
                 if (callback.one) {
@@ -126,7 +115,7 @@
                 var callback, deletes = [];
 
                 for (var i in list) {
-                    this.fire(i);
+                    this.fire(i, caller);
                 }
             }
         };
@@ -138,7 +127,8 @@
         return this.initialize.apply(this);
     }
 
-    $.extend(MediaQuery.prototype, {
+    MediaQuery.prototype = {
+        constructor: MediaQuery,
         initialize: function() {
             this.callbacks = {
                 enter: new Callbacks(),
@@ -170,12 +160,12 @@
                 return this;
             }
 
-            if (fn == null && $.isFunction(data)) {
+            if (fn == null && isFunction(data)) {
                 fn = data;
                 data = undefined;
             }
 
-            if (!$.isFunction(fn)) {
+            if (!isFunction(fn)) {
                 return this;
             }
 
@@ -220,7 +210,7 @@
         isMatched: function() {
             return this.mql.matches;
         }
-    });
+    };
     var Size = function(name, min, max) {
         this.name = name;
         this.min = min ? min : 0;
@@ -237,7 +227,11 @@
         this.mql.addListener(this.changeListener);
     }
 
-    Size.prototype = $.extend({}, MediaQuery.prototype, Size.prototype, {
+
+    Size.prototype = MediaQuery.prototype;
+    Size.prototype.constructor = Size;
+
+    extend(Size.prototype, {
         destory: function() {
             this.off();
             this.mql.removeListener(this.changeHander);
@@ -301,7 +295,7 @@
 
         current: function() {
             var matches = [];
-            $.each(sizes, function(size, breakpoint) {
+            each(sizes, function(size, breakpoint) {
                 if (breakpoint.isMatched()) {
                     matches.push(breakpoint);
                 }
@@ -350,4 +344,4 @@
 
         }
     });
-})(jQuery, document, window);
+})(document, window);

@@ -1,3 +1,3 @@
-var Breakpoints = $.breakpoints = function() {
+var Breakpoints = window.Breakpoints = function() {
     Breakpoints.define.apply(Breakpoints, arguments);
 };

@@ -1,22 +1,22 @@
 {
-  "name": "jquery-breakpoints",
-  "title": "jQuery breakpoints",
-  "description": "a jquery breakpoints plugin",
-  "version": "0.1.0",
-  "homepage": "https://github.com/amazingSurge/jquery-breakpoints",
+  "name": "Breakpoints.js",
+  "title": "Breakpoints.js",
+  "description": "a breakpoints plugin",
+  "version": "0.2.0",
+  "homepage": "https://github.com/amazingSurge/breakpoints.js",
   "author": {
     "name": "amazingSurge",
     "email": "amazingSurge@yahoo.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/amazingSurge/jquery-breakpoints.git"
+    "url": "https://github.com/amazingSurge/breakpoints.js.git"
   },
-  "bugs": "https://github.com/amazingSurge/jquery-breakpoints/issues",
+  "bugs": "https://github.com/amazingSurge/breakpoints.js/issues",
   "licenses": [
     {
       "type": "GPL",
-      "url": "https://github.com/amazingSurge/jquery-breakpoints/blob/master/LICENSE-GPL"
+      "url": "https://github.com/amazingSurge/breakpoints.js/blob/master/LICENSE-GPL"
     }
   ],
   "devDependencies": {

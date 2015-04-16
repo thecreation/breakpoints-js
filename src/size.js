@@ -14,7 +14,11 @@ var Size = function(name, min, max){
     this.mql.addListener(this.changeListener);
 }
 
-Size.prototype = $.extend({}, MediaQuery.prototype, Size.prototype, {
+
+Size.prototype = MediaQuery.prototype;
+Size.prototype.constructor = Size;
+
+extend(Size.prototype, {
     destory: function(){
         this.off();
         this.mql.removeListener(this.changeHander);

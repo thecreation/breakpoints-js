@@ -4,7 +4,7 @@ var Callbacks = function () {
     return {
         length: 0,
         add: function (fn, data, one) {
-            this.push({
+            list.push({
                 fn: fn,
                 data: data || {},
                 one: one || 0
@@ -25,12 +25,12 @@ var Callbacks = function () {
             list = [];
             this.length = 0;
         },
-        fire: function (i) {
+        fire: function (i, caller) {
             if(!i) {
                 i = this.length - 1;
             }
             var callback = list[i];
-            if ($.isFunction(callback.fn)) {
+            if (isFunction(callback.fn)) {
                     callback.fn.call(caller || window, callback.data);	
             }
             if(callback.one){
@@ -42,7 +42,7 @@ var Callbacks = function () {
             var callback, deletes = [];
 
             for(var i in list){
-                this.fire(i); 
+                this.fire(i, caller); 
             }
         }
     };

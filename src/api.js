@@ -56,7 +56,7 @@ $.extend(Breakpoints, {
 
     current: function() {
         var matches = [];
-        $.each(sizes, function(size, breakpoint){
+        each(sizes, function(size, breakpoint){
             if(breakpoint.isMatched()){
                 matches.push(breakpoint);
             }

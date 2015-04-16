@@ -5,7 +5,8 @@ var MediaQuery = Breakpoints.mediaQuery = function(name, media){
     return this.initialize.apply(this);
 }
 
-$.extend(MediaQuery.prototype, {
+MediaQuery.prototype = {
+    constructor: MediaQuery,
     initialize: function(){
         this.callbacks = {
             enter: new Callbacks(),
@@ -37,12 +38,12 @@ $.extend(MediaQuery.prototype, {
             return this;
         }
 
-        if( fn == null && $.isFunction(data) ){
+        if( fn == null && isFunction(data) ){
             fn = data;
             data = undefined;
         }
 
-        if (!$.isFunction(fn)) {
+        if (!isFunction(fn)) {
             return this;
         }
 
@@ -87,4 +88,4 @@ $.extend(MediaQuery.prototype, {
     isMatched: function(){
         return this.mql.matches;
     }
-});
+};

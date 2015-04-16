@@ -16,11 +16,11 @@
 <script src="../libs/jquery/jquery.js"></script>
 <script src="js/jquery.toc.js"></script>
 <script src="js/prism.js"></script>
-<script src="../dist/jquery-breakpoints.js"></script>
+<script src="../dist/Breakpoints.js"></script>
 
 <script type="text/javascript">
 (function(){
-    $.breakpoints();
+    Breakpoints();
 })();
 </script>
 
@@ -34,7 +34,7 @@
 <h1>Breakpoints</h1>
 <section>
     <h2>Usage</h2>
-    <p>You can init the script easily by code <code class="language-javascript">$.breakpoints();</code>.</p>
+    <p>You can init the script easily by code <code class="language-javascript">Breakpoints();</code>.</p>
     <p>It will use the bootstrap media query breakpoints by default.</p>
     <pre class="language-javascript"><code>Breakpoints.defaults = {
         // Extra small devices (phones)
@@ -61,7 +61,7 @@
     
     <p>You can set up your own settings:</p>
     <pre class="language-javascript"><code>&lt;script type=&quot;text/javascript&quot;&gt;
-    $.breakpoints({
+    Breakpoints({
         mobile: {
             min: 0,
             max: 767
@@ -83,16 +83,16 @@
     <section>
         <h3>is</h3>
         <p>Check if the current is a specific size.</p>
-        <button class="api-is" data-size="xs">$.breakpoints.is('xs')</button>
-        <button class="api-is" data-size="sm">$.breakpoints.is('sm')</button>
-        <button class="api-is" data-size="md">$.breakpoints.is('md')</button>
-        <button class="api-is" data-size="lg">$.breakpoints.is('lg')</button>
+        <button class="api-is" data-size="xs">Breakpoints.is('xs')</button>
+        <button class="api-is" data-size="sm">Breakpoints.is('sm')</button>
+        <button class="api-is" data-size="md">Breakpoints.is('md')</button>
+        <button class="api-is" data-size="lg">Breakpoints.is('lg')</button>
 
         <script type="text/javascript">
             $('.api-is').on('click', function(e){
                 var size = $(this).data('size');
 
-                var result = $.breakpoints.is(size);
+                var result = Breakpoints.is(size);
                 if(result) {
                     alert("it's "+size);
                 } else {
@@ -103,10 +103,10 @@
     </section>
     <section>
         <h3>current</h3>
-        <button class="api-current">$.breakpoints.current()</button>
+        <button class="api-current">Breakpoints.current()</button>
         <script type="text/javascript">
             $('.api-current').on('click', function(e){
-                var result = $.breakpoints.current();
+                var result = Breakpoints.current();
                 if(result) {
                     alert("Current size is " + result.name);
                     console.dir(result);
@@ -121,7 +121,7 @@
         <input type="radio" name="api-on" value="1" /> Enable</br>
         <input type="radio" name="api-on" value="0" checked /> Disable</br>
         <pre class="language-javascript"><code>&lt;script type=&quot;text/javascript&quot;&gt;
-    $.breakpoints.on('md', {
+    Breakpoints.on('md', {
         enter: function() {
             console.info('enter '+ this.name);
         },
@@ -130,7 +130,7 @@
         }
     });
 
-    $.breakpoints.on('lg', 'enter', function(){
+    Breakpoints.on('lg', 'enter', function(){
         console.info('hello lg');
     });
 &lt;/script&gt;</code></pre>
@@ -138,7 +138,7 @@
 <script type="text/javascript">
     $('[name="api-on"]').on('change', function(e){
         if($(this).val() === '1'){
-            $.breakpoints.on('md', {
+            Breakpoints.on('md', {
                 enter: function() {
                     console.info('enter '+ this.name);
                 },
@@ -147,13 +147,13 @@
                 }
             });
 
-            $.breakpoints.on('lg', 'enter', function(){
+            Breakpoints.on('lg', 'enter', function(){
                 console.info('hello lg');
             });
         } else {
-            $.breakpoints.off('md', 'enter');
-            $.breakpoints.off('md', 'leave');
-            $.breakpoints.off('lg');
+            Breakpoints.off('md', 'enter');
+            Breakpoints.off('md', 'leave');
+            Breakpoints.off('lg');
         }
     });
 </script>
@@ -164,13 +164,13 @@
 
         <pre class="language-javascript"><code>
 &lt;script type=&quot;text/javascript&quot;&gt;
-$.breakpoints.on('sm', &quot;enter&quot;, {
+Breakpoints.on('sm', &quot;enter&quot;, {
     name: &quot;Addy&quot;
 }, function(data) {
     console.info(data.name + ' enter '+ this.name);
 });
 
-$.breakpoints.on('sm', &quot;leave&quot;, {
+Breakpoints.on('sm', &quot;leave&quot;, {
     name: &quot;Karl&quot;
 }, function(data) {
     console.info(data.name + ' leave '+ this.name);
@@ -180,19 +180,19 @@ $.breakpoints.on('sm', &quot;leave&quot;, {
 <script type="text/javascript">
     $('[name="api-on-data"]').on('change', function(e){
         if($(this).val() === '1'){
-            $.breakpoints.on('sm', "enter", {
+            Breakpoints.on('sm', "enter", {
                 name: "Addy"
             }, function(data) {
                 console.info(data.name + ' enter '+ this.name);
             });
 
-            $.breakpoints.on('sm', "leave", {
+            Breakpoints.on('sm', "leave", {
                 name: "Karl"
             }, function(data) {
                 console.info(data.name + ' leave '+ this.name);
             });
         } else {
-            $.breakpoints.off('sm');
+            Breakpoints.off('sm');
         }
     });
 </script>

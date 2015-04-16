@@ -1,1 +1,1 @@
-})(jQuery, document, window);
+})(document, window);
