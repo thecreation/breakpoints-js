@@ -18,12 +18,24 @@ module.exports = function(grunt) {
         concat: {
             options: {
                 banner: '<%= banner %>',
-                stripBanners: true
+                stripBanners: true,
+                process: true
             },
             dist: {
-                src: ['src/<%= pkg.name %>.js'],
+                src: [
+                    'src/intro.js',
+                    'src/setup.js',
+                    'src/util.js',
+                    'src/defaults.js',
+                    'src/mediaBuilder.js',
+                    'src/callbacks.js',
+                    'src/mediaQuery.js',
+                    'src/size.js',
+                    'src/api.js',
+                    'src/outro.js'
+                ],
                 dest: 'dist/<%= pkg.name %>.js'
-            },
+            }
         },
 
         // -- uglify config ----------------------------------------------------------
@@ -55,7 +67,12 @@ module.exports = function(grunt) {
 
         // -- jsbeautifier config -----------------------------------------------------
         jsbeautifier: {
-            files: ['Gruntfile.js', "src/**/*.js"],
+            dist: {
+                src : ["<%= concat.dist.dest %>"]
+            },
+            src: {
+                files: ['Gruntfile.js', "src/**/*.js"],
+            },
             options: {
                 "indent_size": 4,
                 "indent_char": " ",
@@ -81,8 +98,8 @@ module.exports = function(grunt) {
                 tasks: ['jshint:gruntfile']
             },
             src: {
-                files: '<%= jshint.src.src %>',
-                tasks: ['jshint:src']
+                files: '<%= concat.dist.src %>',
+                tasks: ['dist']
             }
         },
 
@@ -107,7 +124,7 @@ module.exports = function(grunt) {
     // Default task.
     grunt.registerTask('default', ['js', 'dist']);
 
-    grunt.registerTask('dist', ['clean', 'concat', 'uglify']);
+    grunt.registerTask('dist', ['clean', 'concat', 'jsbeautifier:dist', 'uglify']);
     grunt.registerTask('js', ['jsbeautifier', 'jshint']);
 
     grunt.registerTask('version', [
