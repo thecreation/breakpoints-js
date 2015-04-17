@@ -1,9 +1,9 @@
 var ChangeEvent = {
     target: null,
     callbacks: new Callbacks(),
-    trigger: function(size){
+    trigger: function(size) {
         var self = this;
-        this.callbacks.fire(size, function(caller, callback){
+        this.callbacks.fire(size, function(caller, callback) {
             if (isFunction(callback.fn)) {
                 callback.fn.call({
                     current: size,
@@ -13,11 +13,11 @@ var ChangeEvent = {
         });
         this.target = size;
     },
-    one: function(data, fn){
+    one: function(data, fn) {
         return this.on(data, fn, 1);
     },
-    on: function(data, fn, /*INTERNAL*/ one){
-        if( fn == null && isFunction(data) ){
+    on: function(data, fn, /*INTERNAL*/ one) {
+        if (fn == null && isFunction(data)) {
             fn = data;
             data = undefined;
         }
@@ -26,8 +26,8 @@ var ChangeEvent = {
         }
         this.callbacks.add(fn, data, one);
     },
-    off: function(fn){
-        if(fn == null){
+    off: function(fn) {
+        if (fn == null) {
             this.callbacks.empty();
         }
     }

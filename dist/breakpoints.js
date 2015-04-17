@@ -1,4 +1,4 @@
-/*! Breakpoints.js - v0.2.0 - 2015-04-18
+/*! Breakpoints.js - v0.3.0 - 2015-04-18
  * https://github.com/amazingSurge/breakpoints.js
  * Copyright (c) 2015 amazingSurge; Licensed GPL */
 (function(document, window, undefined) {
@@ -29,6 +29,7 @@
         }
         return obj;
     }
+
     Breakpoints.defaults = {
         // Extra small devices (phones)
         xs: {
@@ -43,7 +44,7 @@
         // Medium devices (desktops)
         md: {
             min: 992,
-            max: 1199,
+            max: 1199
         },
         // Large devices (large desktops)
         lg: {
@@ -51,6 +52,7 @@
             max: Infinity
         }
     };
+
     var MediaBuilder = Breakpoints.mediaBuilder = {
         min: function(min, unit) {
             return '(min-width: ' + min + unit + ')';
@@ -74,6 +76,7 @@
             return this.between(min, max, unit);
         }
     };
+
     var Callbacks = function() {
         var list = [];
 
@@ -121,14 +124,13 @@
                 }
             },
             fire: function(caller, fn) {
-                var callback, deletes = [];
-
                 for (var i in list) {
                     this.call(i, caller, fn);
                 }
             }
         };
     };
+
     var ChangeEvent = {
         target: null,
         callbacks: new Callbacks(),
@@ -163,6 +165,7 @@
             }
         }
     };
+
     var MediaQuery = Breakpoints.mediaQuery = function(name, media) {
         this.name = name;
         this.media = media;
@@ -254,6 +257,7 @@
             return this.mql.matches;
         }
     };
+
     var Size = function(name, min, max, unit) {
         this.name = name;
         this.min = min ? min : 0;
@@ -264,7 +268,7 @@
         this.initialize.apply(this);
 
         var self = this;
-        this.changeListener = function(mql) {
+        this.changeListener = function() {
             if (self.isMatched()) {
                 ChangeEvent.trigger(self);
             }
@@ -285,6 +289,7 @@
             this.mql.removeListener(this.changeHander);
         }
     });
+
     var sizes = {};
 
     $.extend(Breakpoints, {
@@ -329,7 +334,7 @@
         /* get all size name */
         all: function() {
             var names = [];
-            each(sizes, function(name, size) {
+            each(sizes, function(name) {
                 names.push(name);
             });
             return names;
@@ -408,4 +413,5 @@
             return this;
         }
     });
+
 })(document, window);

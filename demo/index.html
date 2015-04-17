@@ -6,7 +6,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Breakpoints</title>
+<title>Breakpoints.js</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width">
 
@@ -31,7 +31,8 @@
 <![endif]-->
 <div id="toc"></div>
 <div id="wrapper">
-<h1>Breakpoints</h1>
+<h1>Breakpoints.js</h1>
+<p>Breakpoints.js is a lightweight, pure javascript library (with **no dependencies**) for attaching callbacks to breakpoints. </p>
 <section>
     <h2>Usage</h2>
     <p>You can init the script easily by code <code class="language-javascript">Breakpoints();</code>.</p>
@@ -59,7 +60,7 @@
         }
 };</code></pre>
     
-    <p>You can set up your own settings:</p>
+    <p>You can set up your own breakpoints when initialize:</p>
     <pre class="language-javascript"><code>&lt;script type=&quot;text/javascript&quot;&gt;
     Breakpoints({
         mobile: {
@@ -82,7 +83,7 @@
     <h2>API</h2>
     <section>
         <h3>is</h3>
-        <p>Check if the current is a specific size.</p>
+        <p>Check if the current screen is a specific size.</p>
         <button class="api-is" data-size="xs">is xs?</button>
         <button class="api-is" data-size="sm">is sm?</button>
         <button class="api-is" data-size="md">is md?</button>
@@ -104,25 +105,8 @@
         </script>
     </section>
     <section>
-        <h3>current</h3>
-        <button class="api-current">get current size</button>
-        
-        <pre class="language-javascript"><code>Breakpoints.current();</code></pre>
-
-        <script type="text/javascript">
-            $('.api-current').on('click', function(e){
-                var result = Breakpoints.current();
-                if(result) {
-                    alert("Current size is " + result.name);
-                    console.dir(result);
-                } else {
-                    alert("There is no matched sizes.");
-                }
-            });
-        </script>
-    </section>
-    <section>
         <h3>on</h3>
+        <p>Attach an event handler function for one or more events to the size.</p>
         <input type="radio" name="api-on" value="1" /> Enable</br>
         <input type="radio" name="api-on" value="0" checked /> Disable</br>
         <pre class="language-javascript"><code>Breakpoints.on('md', {
@@ -200,11 +184,11 @@ Breakpoints.on('sm', &quot;leave&quot;, {
     </section>
     <section>
         <h3>one</h3>
+        <p>The handler attached to the size will executed at most once.</p>
         <input type="radio" name="api-one" value="1" /> Enable</br>
         <input type="radio" name="api-one" value="0" checked /> Disable</br>
 
         <pre class="language-javascript"><code>
-// bind change event
 Breakpoints.one('md', 'enter', function(){
     console.info('this only appear once when enter md');
 });
@@ -224,6 +208,7 @@ Breakpoints.one('md', 'enter', function(){
     </section>
     <section>
         <h3>off</h3>
+        <p>Remove event handlers attached to size.</p>
         <pre class="language-javascript"><code>// remove all events bind to sm size
 Breakpoints.off('sm');
 
@@ -243,16 +228,17 @@ Breakpoints.off('lg', 'enter', enterHandler);</code></pre>
     </section>
     <section>
         <h3>get</h3>
+        <p>Return the size object that you can operate it handily.</p>
         <pre class="language-javascript"><code>
 // get size object
 var sm = Breakpoints.get('sm');
 
-// bind events
+// attach events
 sm.on('enter', function(){
     // do something
 });
 
-// unbind events
+// remove event handler
 sm.off('enter');
 
 // get min width
@@ -278,7 +264,27 @@ Breakpoints.get('sm').on({
 });</code></pre>
     </section>
     <section>
+        <h3>current</h3>
+        <p>Return the current screen size object</p>
+        <button class="api-current">get current size</button>
+
+        <pre class="language-javascript"><code>Breakpoints.current();</code></pre>
+
+        <script type="text/javascript">
+            $('.api-current').on('click', function(e){
+                var result = Breakpoints.current();
+                if(result) {
+                    alert("Current size is " + result.name);
+                    console.dir(result);
+                } else {
+                    alert("There is no matched sizes.");
+                }
+            });
+        </script>
+    </section>
+    <section>
         <h3>change</h3>
+        <p>Bind an event handler to the size change event.</p>
         <input type="radio" name="api-change" value="1" /> On Change</br>
         <input type="radio" name="api-change" value="0" checked /> Off Change</br>
 

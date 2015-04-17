@@ -35,7 +35,7 @@ module.exports = function(grunt) {
                     'src/api.js',
                     'src/outro.js'
                 ],
-                dest: 'dist/Breakpoints.js'
+                dest: 'dist/breakpoints.js'
             }
         },
 
@@ -46,7 +46,7 @@ module.exports = function(grunt) {
             },
             dist: {
                 src: '<%= concat.dist.dest %>',
-                dest: 'dist/Breakpoints.min.js'
+                dest: 'dist/breakpoints.min.js'
             },
         },
 
@@ -58,21 +58,21 @@ module.exports = function(grunt) {
                 },
                 src: 'Gruntfile.js'
             },
-            src: {
+            dist: {
                 options: {
                     jshintrc: 'src/.jshintrc'
                 },
-                src: ['src/**/*.js']
+                src: ["<%= concat.dist.dest %>"]
             }
         },
 
         // -- jsbeautifier config -----------------------------------------------------
         jsbeautifier: {
             dist: {
-                src : ["<%= concat.dist.dest %>"]
+                src: ["<%= concat.dist.dest %>"]
             },
-            src: {
-                files: ['Gruntfile.js', "src/**/*.js"],
+            source: {
+                src: ['Gruntfile.js', "src/*.js"],
             },
             options: {
                 "indent_size": 4,
@@ -123,7 +123,7 @@ module.exports = function(grunt) {
     });
 
     // Default task.
-    grunt.registerTask('default', ['js', 'dist']);
+    grunt.registerTask('default', ['dist', 'jshint']);
 
     grunt.registerTask('dist', ['clean', 'concat', 'jsbeautifier:dist', 'uglify']);
     grunt.registerTask('js', ['jsbeautifier', 'jshint']);

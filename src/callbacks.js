@@ -1,22 +1,22 @@
-var Callbacks = function () {
+var Callbacks = function() {
     var list = [];
 
     return {
         length: 0,
-        add: function (fn, data, one) {
+        add: function(fn, data, one) {
             list.push({
                 fn: fn,
                 data: data || {},
                 one: one || 0
             });
-            
-            this.length ++;
+
+            this.length++;
         },
         remove: function(fn) {
             for (var i = 0; i < list.length; i++) {
                 if (list[i].fn === fn) {
                     list.splice(i, 1);
-                    this.length --;
+                    this.length--;
                     i--;
                 }
             }
@@ -25,30 +25,28 @@ var Callbacks = function () {
             list = [];
             this.length = 0;
         },
-        call: function (i, caller, fn) {
-            if(!i) {
+        call: function(i, caller, fn) {
+            if (!i) {
                 i = this.length - 1;
             }
             var callback = list[i];
-            
-            if(isFunction(fn)){
+
+            if (isFunction(fn)) {
                 fn.call(this, caller, callback, i);
             } else {
                 if (isFunction(callback.fn)) {
                     callback.fn.call(caller || window, callback.data);
                 }
             }
-            
-            if(callback.one){
+
+            if (callback.one) {
                 delete list[i];
-                this.length --;
+                this.length--;
             }
         },
-        fire: function (caller, fn) {
-            var callback, deletes = [];
-
-            for(var i in list){
-                this.call(i, caller, fn); 
+        fire: function(caller, fn) {
+            for (var i in list) {
+                this.call(i, caller, fn);
             }
         }
     };

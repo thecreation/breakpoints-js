@@ -12,7 +12,7 @@ Breakpoints.defaults = {
     // Medium devices (desktops)
     md: {
         min: 992,
-        max: 1199,
+        max: 1199
     },
     // Large devices (large desktops)
     lg: {

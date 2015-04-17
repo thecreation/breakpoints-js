@@ -1,9 +1,9 @@
 function each(obj, fn) {
     var continues;
 
-    for(var i in obj) {
+    for (var i in obj) {
         continues = fn(i, obj[i]);
-        if(continues === false) {
+        if (continues === false) {
             break; //allow early exit
         }
     }
