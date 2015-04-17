@@ -1,9 +1,9 @@
-var Size = function(name, min, max){
+var Size = function(name, min, max, unit){
     this.name = name;
     this.min = min? min: 0;
     this.max = max? max: Infinity;
 
-    this.media = MediaBuilder.get(this.min, this.max);
+    this.media = MediaBuilder.get(this.min, this.max, unit);
 
     this.initialize.apply(this);
   

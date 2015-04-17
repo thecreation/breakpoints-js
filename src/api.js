@@ -1,15 +1,19 @@
 var sizes = {};
 
 $.extend(Breakpoints, {
-    define: function(breakpoints) {
+    define: function(breakpoints, options) {
         if(!breakpoints) {
             breakpoints = Breakpoints.defaults;
         }
 
+        this.options = extend(options || {}, {
+            unit: 'px'
+        });
+
         sizes = {};
 
         for(var size in breakpoints){
-            this.set(size, breakpoints[size].min, breakpoints[size].max);
+            this.set(size, breakpoints[size].min, breakpoints[size].max, this.options.unit);
         }
     },
 
@@ -27,8 +31,8 @@ $.extend(Breakpoints, {
         return sizes;
     },
 
-    set: function(name, min, max) {
-        sizes[name] = new Size(name, min || null, max || null);
+    set: function(name, min, max, unit) {
+        sizes[name] = new Size(name, min || null, max || null, unit || null);
     },
 
     get: function(size){

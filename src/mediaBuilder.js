@@ -1,20 +1,23 @@
 var MediaBuilder = Breakpoints.mediaBuilder = {
-    min: function (min) {
-        return '(min-width: ' + min + 'px)';
+    min: function (min, unit) {
+        return '(min-width: ' + min + unit +')';
     },
-    max: function (max) {
-        return '(max-width: ' + max + 'px)';
+    max: function (max, unit) {
+        return '(max-width: ' + max + unit +')';
     },
-    between: function (min, max) {
-        return '(min-width: ' + min + 'px) and (max-width: ' + max + 'px)';
+    between: function (min, max, unit) {
+        return '(min-width: ' + min + unit +') and (max-width: ' + max + unit + ')';
     },
-    get: function(min, max){
+    get: function(min, max, unit){
+        if(!unit) {
+            unit = 'px';
+        }
         if(min === 0) {
-            return this.max(max);
+            return this.max(max, unit);
         }
         if(max === Infinity) {
-            return this.min(min);
+            return this.min(min, unit);
         }
-        return this.between(min, max);
+        return this.between(min, max, unit);
     }
 };

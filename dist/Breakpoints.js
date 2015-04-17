@@ -52,23 +52,26 @@
         }
     };
     var MediaBuilder = Breakpoints.mediaBuilder = {
-        min: function(min) {
-            return '(min-width: ' + min + 'px)';
+        min: function(min, unit) {
+            return '(min-width: ' + min + unit + ')';
         },
-        max: function(max) {
-            return '(max-width: ' + max + 'px)';
+        max: function(max, unit) {
+            return '(max-width: ' + max + unit + ')';
         },
-        between: function(min, max) {
-            return '(min-width: ' + min + 'px) and (max-width: ' + max + 'px)';
+        between: function(min, max, unit) {
+            return '(min-width: ' + min + unit + ') and (max-width: ' + max + unit + ')';
         },
-        get: function(min, max) {
+        get: function(min, max, unit) {
+            if (!unit) {
+                unit = 'px';
+            }
             if (min === 0) {
-                return this.max(max);
+                return this.max(max, unit);
             }
             if (max === Infinity) {
-                return this.min(min);
+                return this.min(min, unit);
             }
-            return this.between(min, max);
+            return this.between(min, max, unit);
         }
     };
     var Callbacks = function() {
@@ -211,12 +214,12 @@
             return this.mql.matches;
         }
     };
-    var Size = function(name, min, max) {
+    var Size = function(name, min, max, unit) {
         this.name = name;
         this.min = min ? min : 0;
         this.max = max ? max : Infinity;
 
-        this.media = MediaBuilder.get(this.min, this.max);
+        this.media = MediaBuilder.get(this.min, this.max, unit);
 
         this.initialize.apply(this);
 
@@ -240,15 +243,19 @@
     var sizes = {};
 
     $.extend(Breakpoints, {
-        define: function(breakpoints) {
+        define: function(breakpoints, options) {
             if (!breakpoints) {
                 breakpoints = Breakpoints.defaults;
             }
 
+            this.options = extend(options || {}, {
+                unit: 'px'
+            });
+
             sizes = {};
 
             for (var size in breakpoints) {
-                this.set(size, breakpoints[size].min, breakpoints[size].max);
+                this.set(size, breakpoints[size].min, breakpoints[size].max, this.options.unit);
             }
         },
 
@@ -266,8 +273,8 @@
             return sizes;
         },
 
-        set: function(name, min, max) {
-            sizes[name] = new Size(name, min || null, max || null);
+        set: function(name, min, max, unit) {
+            sizes[name] = new Size(name, min || null, max || null, unit || null);
         },
 
         get: function(size) {
