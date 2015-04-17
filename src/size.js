@@ -9,10 +9,15 @@ var Size = function(name, min, max, unit){
   
     var self = this;
     this.changeListener = function(mql){
-    $(window).trigger('sizeChange.breakpoints', self);
-};
+        if(self.isMatched()){
+            ChangeEvent.trigger(self);
+        }
+    };
+    if(this.isMatched()){
+        ChangeEvent.target = this;
+    }
     this.mql.addListener(this.changeListener);
-}
+};
 
 
 Size.prototype = MediaQuery.prototype;

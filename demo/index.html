@@ -83,10 +83,12 @@
     <section>
         <h3>is</h3>
         <p>Check if the current is a specific size.</p>
-        <button class="api-is" data-size="xs">Breakpoints.is('xs')</button>
-        <button class="api-is" data-size="sm">Breakpoints.is('sm')</button>
-        <button class="api-is" data-size="md">Breakpoints.is('md')</button>
-        <button class="api-is" data-size="lg">Breakpoints.is('lg')</button>
+        <button class="api-is" data-size="xs">is xs?</button>
+        <button class="api-is" data-size="sm">is sm?</button>
+        <button class="api-is" data-size="md">is md?</button>
+        <button class="api-is" data-size="lg">is lg?</button>
+
+        <pre class="language-javascript"><code>Breakpoints.is('xs'); // return true or false</code></pre>
 
         <script type="text/javascript">
             $('.api-is').on('click', function(e){
@@ -94,16 +96,19 @@
 
                 var result = Breakpoints.is(size);
                 if(result) {
-                    alert("it's "+size);
+                    alert("yes");
                 } else {
-                    alert("it's not "+size);
+                    alert("no");
                 }
             });
         </script>
     </section>
     <section>
         <h3>current</h3>
-        <button class="api-current">Breakpoints.current()</button>
+        <button class="api-current">get current size</button>
+        
+        <pre class="language-javascript"><code>Breakpoints.current();</code></pre>
+
         <script type="text/javascript">
             $('.api-current').on('click', function(e){
                 var result = Breakpoints.current();
@@ -120,20 +125,18 @@
         <h3>on</h3>
         <input type="radio" name="api-on" value="1" /> Enable</br>
         <input type="radio" name="api-on" value="0" checked /> Disable</br>
-        <pre class="language-javascript"><code>&lt;script type=&quot;text/javascript&quot;&gt;
-    Breakpoints.on('md', {
-        enter: function() {
-            console.info('enter '+ this.name);
-        },
-        leave: function() {
-            console.info('leave '+ this.name);
-        }
-    });
+        <pre class="language-javascript"><code>Breakpoints.on('md', {
+    enter: function() {
+        console.info('enter '+ this.name);
+    },
+    leave: function() {
+        console.info('leave '+ this.name);
+    }
+});
 
-    Breakpoints.on('lg', 'enter', function(){
-        console.info('hello lg');
-    });
-&lt;/script&gt;</code></pre>
+Breakpoints.on('lg', 'enter', function(){
+    console.info('hello lg');
+});</code></pre>
 
 <script type="text/javascript">
     $('[name="api-on"]').on('change', function(e){
@@ -163,7 +166,6 @@
         <input type="radio" name="api-on-data" value="0" checked /> Disable</br>
 
         <pre class="language-javascript"><code>
-&lt;script type=&quot;text/javascript&quot;&gt;
 Breakpoints.on('sm', &quot;enter&quot;, {
     name: &quot;Addy&quot;
 }, function(data) {
@@ -174,8 +176,7 @@ Breakpoints.on('sm', &quot;leave&quot;, {
     name: &quot;Karl&quot;
 }, function(data) {
     console.info(data.name + ' leave '+ this.name);
-});
-&lt;/script&gt;</code></pre>
+});</code></pre>
 
 <script type="text/javascript">
     $('[name="api-on-data"]').on('change', function(e){
@@ -196,8 +197,121 @@ Breakpoints.on('sm', &quot;leave&quot;, {
         }
     });
 </script>
+    </section>
+    <section>
+        <h3>one</h3>
+        <input type="radio" name="api-one" value="1" /> Enable</br>
+        <input type="radio" name="api-one" value="0" checked /> Disable</br>
 
-    
+        <pre class="language-javascript"><code>
+// bind change event
+Breakpoints.one('md', 'enter', function(){
+    console.info('this only appear once when enter md');
+});
+</code></pre>
+
+<script type="text/javascript">
+    $('[name="api-one"]').on('change', function(e){
+        if($(this).val() === '1'){
+            Breakpoints.one('md', 'enter', function(){
+                console.info('this only appear once when enter md');
+            });
+        } else {
+            Breakpoints.off('md', 'enter');
+        }
+    });
+</script>
+    </section>
+    <section>
+        <h3>off</h3>
+        <pre class="language-javascript"><code>// remove all events bind to sm size
+Breakpoints.off('sm');
+
+// remove all enter type events bind to md size
+Breakpoints.off('md', 'enter'); 
+
+// remove specific event handler
+var enterHandler = function(){};
+Breakpoints.on('lg', 'enter', enterHandler);
+
+Breakpoints.off('lg', {
+    enter: enterHandler
+})
+
+// alternative way
+Breakpoints.off('lg', 'enter', enterHandler);</code></pre>
+    </section>
+    <section>
+        <h3>get</h3>
+        <pre class="language-javascript"><code>
+// get size object
+var sm = Breakpoints.get('sm');
+
+// bind events
+sm.on('enter', function(){
+    // do something
+});
+
+// unbind events
+sm.off('enter');
+
+// get min width
+sm.min // 768
+
+// get max width
+sm.max // 991
+
+// get media query
+sm.media // "(min-width: 768px) and (max-width: 991px)"
+
+// check if it's current size
+sm.isMatched(); // true or false
+
+// you also do in a chain
+Breakpoints.get('sm').on({
+    enter: function(){
+
+    },
+    leave: function(){
+
+    }
+});</code></pre>
+    </section>
+    <section>
+        <h3>change</h3>
+        <input type="radio" name="api-change" value="1" /> On Change</br>
+        <input type="radio" name="api-change" value="0" checked /> Off Change</br>
+
+        <pre class="language-javascript"><code>
+// bind change event
+Breakpoints.on('change', function(){
+    console.info('enter ' + this.current.name);
+});
+
+// altrnative bind
+var changeHandler = function(){
+    // do something 
+};
+Breakpoints.on('change', changeHandler);
+
+// unbind the handler
+Breakpoints.off('change', changeHandler);
+
+// unbind all change handlers
+Breakpoints.off('change');</code></pre>
+
+<script type="text/javascript">
+    $('[name="api-change"]').on('change', function(e){
+        if($(this).val() === '1'){
+            Breakpoints.on('change', function(){
+                console.info('enter ' + this.current.name);
+                console.info('leave ' + this.previous.name);
+            });
+        } else {
+            Breakpoints.off('change');
+        }
+    });
+</script>
     </section>
 </section>
 </div>

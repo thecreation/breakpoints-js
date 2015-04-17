@@ -1,4 +1,4 @@
-/*! Breakpoints.js - v0.2.0 - 2015-04-17
+/*! Breakpoints.js - v0.2.0 - 2015-04-18
  * https://github.com/amazingSurge/breakpoints.js
  * Copyright (c) 2015 amazingSurge; Licensed GPL */
 (function(document, window, undefined) {
@@ -97,31 +97,71 @@
                     }
                 }
             },
-            clear: function() {
+            empty: function() {
                 list = [];
                 this.length = 0;
             },
-            fire: function(i, caller) {
+            call: function(i, caller, fn) {
                 if (!i) {
                     i = this.length - 1;
                 }
                 var callback = list[i];
-                if (isFunction(callback.fn)) {
-                    callback.fn.call(caller || window, callback.data);
+
+                if (isFunction(fn)) {
+                    fn.call(this, caller, callback, i);
+                } else {
+                    if (isFunction(callback.fn)) {
+                        callback.fn.call(caller || window, callback.data);
+                    }
                 }
+
                 if (callback.one) {
                     delete list[i];
                     this.length--;
                 }
             },
-            process: function(caller) {
+            fire: function(caller, fn) {
                 var callback, deletes = [];
 
                 for (var i in list) {
-                    this.fire(i, caller);
+                    this.call(i, caller, fn);
                 }
             }
         };
+    };
+    var ChangeEvent = {
+        target: null,
+        callbacks: new Callbacks(),
+        trigger: function(size) {
+            var self = this;
+            this.callbacks.fire(size, function(caller, callback) {
+                if (isFunction(callback.fn)) {
+                    callback.fn.call({
+                        current: size,
+                        previous: self.target
+                    }, callback.data);
+                }
+            });
+            this.target = size;
+        },
+        one: function(data, fn) {
+            return this.on(data, fn, 1);
+        },
+        on: function(data, fn, /*INTERNAL*/ one) {
+            if (fn == null && isFunction(data)) {
+                fn = data;
+                data = undefined;
+            }
+            if (!isFunction(fn)) {
+                return this;
+            }
+            this.callbacks.add(fn, data, one);
+        },
+        off: function(fn) {
+            if (fn == null) {
+                this.callbacks.empty();
+            }
+        }
     };
     var MediaQuery = Breakpoints.mediaQuery = function(name, media) {
         this.name = name;
@@ -149,7 +189,7 @@
             this.mqlListener = function(mql) {
                 var type = (mql.matches && 'enter') || 'leave';
 
-                self.callbacks[type].process(self);
+                self.callbacks[type].fire(self);
             };
             this.mql.addListener(this.mqlListener);
         },
@@ -175,7 +215,7 @@
             if (types in this.callbacks) {
                 this.callbacks[types].add(fn, data, one);
                 if (this.isMatched() && types === 'enter') {
-                    this.callbacks[types].fire();
+                    this.callbacks[types].call();
                 }
             }
 
@@ -196,14 +236,14 @@
             }
 
             if (types == null) {
-                this.callbacks.enter.clear();
-                this.callbacks.leave.clear();
+                this.callbacks.enter.empty();
+                this.callbacks.leave.empty();
             }
             if (types in this.callbacks) {
                 if (fn) {
                     this.callbacks[types].remove(fn);
                 } else {
-                    this.callbacks[types].clear();
+                    this.callbacks[types].empty();
                 }
             }
 
@@ -225,10 +265,15 @@
 
         var self = this;
         this.changeListener = function(mql) {
-            $(window).trigger('sizeChange.breakpoints', self);
+            if (self.isMatched()) {
+                ChangeEvent.trigger(self);
+            }
         };
+        if (this.isMatched()) {
+            ChangeEvent.target = this;
+        }
         this.mql.addListener(this.changeListener);
-    }
+    };
 
 
     Size.prototype = MediaQuery.prototype;
@@ -243,20 +288,33 @@
     var sizes = {};
 
     $.extend(Breakpoints, {
-        define: function(breakpoints, options) {
-            if (!breakpoints) {
-                breakpoints = Breakpoints.defaults;
+        defined: false,
+        define: function(values, options) {
+            if (this.defined) {
+                this.destory();
+            }
+
+            if (!values) {
+                values = Breakpoints.defaults;
             }
 
             this.options = extend(options || {}, {
                 unit: 'px'
             });
 
-            sizes = {};
-
-            for (var size in breakpoints) {
-                this.set(size, breakpoints[size].min, breakpoints[size].max, this.options.unit);
+            for (var size in values) {
+                this.set(size, values[size].min, values[size].max, this.options.unit);
             }
+
+            this.defined = true;
+        },
+
+        destory: function() {
+            each(sizes, function(name, size) {
+                size.destory();
+            });
+            sizes = {};
+            ChangeEvent.target = null;
         },
 
         is: function(size) {
@@ -268,64 +326,64 @@
             return breakpoint.isMatched();
         },
 
-        /* get all sizes */
+        /* get all size name */
         all: function() {
-            return sizes;
+            var names = [];
+            each(sizes, function(name, size) {
+                names.push(name);
+            });
+            return names;
         },
 
         set: function(name, min, max, unit) {
+            var size = this.get(name);
+            if (size) {
+                size.destory();
+            }
             sizes[name] = new Size(name, min || null, max || null, unit || null);
         },
 
         get: function(size) {
-            if (size in sizes) {
+            if (sizes.hasOwnProperty(size)) {
                 return sizes[size];
             }
             return null;
         },
 
         getMin: function(size) {
-            var breakpoint = this.get(size);
-            if (breakpoint) {
-                return breakpoint.min;
+            var obj = this.get(size);
+            if (obj) {
+                return obj.min;
             }
             return null;
         },
 
         getMax: function(size) {
-            var breakpoint = this.get(size);
-            if (breakpoint) {
-                return breakpoint.max;
+            var obj = this.get(size);
+            if (obj) {
+                return obj.max;
             }
             return null;
         },
 
         current: function() {
-            var matches = [];
-            each(sizes, function(size, breakpoint) {
-                if (breakpoint.isMatched()) {
-                    matches.push(breakpoint);
-                }
-            });
-
-            if (matches.length === 0) {
-                return false;
-            } else if (matches.length === 1) {
-                return matches[0];
-            } else {
-                return matches;
-            }
+            return ChangeEvent.target;
         },
 
         getMedia: function(size) {
-            var breakpoint = this.get(size);
-            if (breakpoint) {
-                return breakpoint.media;
+            var obj = this.get(size);
+            if (obj) {
+                return obj.media;
             }
             return null;
         },
 
         on: function(sizes, types, data, fn, /*INTERNAL*/ one) {
+            if (sizes === 'change') {
+                fn = data;
+                data = types;
+                return ChangeEvent.on(data, fn, one);
+            }
             var size = this.get(sizes);
 
             if (size) {
@@ -339,16 +397,15 @@
         },
 
         off: function(sizes, types, fn) {
+            if (sizes === 'change') {
+                return ChangeEvent.off(types);
+            }
             var size = this.get(sizes);
 
             if (size) {
                 size.off(types, fn);
             }
             return this;
-        },
-
-        change: function(fn) {
-
         }
     });
 })(document, window);

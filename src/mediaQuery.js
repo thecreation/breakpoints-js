@@ -24,7 +24,7 @@ MediaQuery.prototype = {
         this.mqlListener = function(mql){
             var type  = (mql.matches && 'enter') || 'leave';
 
-            self.callbacks[type].process(self);
+            self.callbacks[type].fire(self);
         };
         this.mql.addListener(this.mqlListener);
     },
@@ -50,7 +50,7 @@ MediaQuery.prototype = {
         if(types in this.callbacks){
             this.callbacks[types].add(fn, data, one);
             if(this.isMatched() && types === 'enter') {
-                this.callbacks[types].fire();
+                this.callbacks[types].call();
            }
         }
 
@@ -71,14 +71,14 @@ MediaQuery.prototype = {
         }
 
         if(types == null){
-            this.callbacks.enter.clear();
-            this.callbacks.leave.clear();
+            this.callbacks.enter.empty();
+            this.callbacks.leave.empty();
         }
         if(types in this.callbacks){
             if(fn){
                 this.callbacks[types].remove(fn);
             } else {
-                this.callbacks[types].clear();
+                this.callbacks[types].empty();
             }
         }
         

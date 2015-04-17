@@ -1,20 +1,33 @@
 var sizes = {};
 
 $.extend(Breakpoints, {
-    define: function(breakpoints, options) {
-        if(!breakpoints) {
-            breakpoints = Breakpoints.defaults;
+    defined: false,
+    define: function(values, options) {
+        if(this.defined){
+            this.destory();
+        }
+
+        if(!values) {
+            values = Breakpoints.defaults;
         }
 
         this.options = extend(options || {}, {
             unit: 'px'
         });
 
-        sizes = {};
-
-        for(var size in breakpoints){
-            this.set(size, breakpoints[size].min, breakpoints[size].max, this.options.unit);
+        for(var size in values){
+            this.set(size, values[size].min, values[size].max, this.options.unit);
         }
+
+        this.defined = true;
+    },
+
+    destory: function(){
+        each(sizes, function(name, size){
+            size.destory();
+        });
+        sizes = {};
+        ChangeEvent.target = null;
     },
 
     is: function(size) {
@@ -26,64 +39,64 @@ $.extend(Breakpoints, {
         return breakpoint.isMatched();
     },
 
-    /* get all sizes */
+    /* get all size name */
     all: function() {
-        return sizes;
+        var names = [];
+        each(sizes, function(name, size){
+            names.push(name);
+        });
+        return names;
     },
 
     set: function(name, min, max, unit) {
+        var size = this.get(name);
+        if(size){
+            size.destory();
+        }
         sizes[name] = new Size(name, min || null, max || null, unit || null);
     },
 
     get: function(size){
-        if(size in sizes){
+        if(sizes.hasOwnProperty(size)){
             return sizes[size];
         }
         return null;
     },
 
     getMin: function(size) {
-        var breakpoint = this.get(size);
-        if(breakpoint){
-            return breakpoint.min;
+        var obj = this.get(size);
+        if(obj){
+            return obj.min;
         }
         return null;
     },
 
     getMax: function(size) {
-        var breakpoint = this.get(size);
-        if(breakpoint){
-            return breakpoint.max;
+        var obj = this.get(size);
+        if(obj){
+            return obj.max;
         }
         return null;
     },
 
     current: function() {
-        var matches = [];
-        each(sizes, function(size, breakpoint){
-            if(breakpoint.isMatched()){
-                matches.push(breakpoint);
-            }
-        });
-
-        if(matches.length === 0){
-            return false;
-        } else if(matches.length === 1){
-            return matches[0];
-        } else {
-            return matches;
-        }
+        return ChangeEvent.target;
     },
 
     getMedia: function(size){
-        var breakpoint = this.get(size);
-        if(breakpoint){
-            return breakpoint.media;
+        var obj = this.get(size);
+        if(obj){
+            return obj.media;
         }
         return null;
     },
 
     on: function(sizes, types, data, fn, /*INTERNAL*/ one) {
+        if(sizes === 'change'){
+            fn = data;
+            data = types;
+            return ChangeEvent.on(data, fn, one);
+        }
         var size = this.get(sizes);
 
         if(size) {
@@ -97,15 +110,14 @@ $.extend(Breakpoints, {
     },
 
     off: function(sizes, types, fn) {
+        if(sizes === 'change'){
+            return ChangeEvent.off(types);
+        }
         var size = this.get(sizes);
 
         if(size) {
             size.off(types, fn);
         }
         return this;
-    },
-    
-    change: function(fn){
-
     }
 });

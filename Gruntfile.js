@@ -29,6 +29,7 @@ module.exports = function(grunt) {
                     'src/defaults.js',
                     'src/mediaBuilder.js',
                     'src/callbacks.js',
+                    'src/changeEvent.js',
                     'src/mediaQuery.js',
                     'src/size.js',
                     'src/api.js',

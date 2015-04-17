@@ -21,28 +21,34 @@ var Callbacks = function () {
                 }
             }
         },
-        clear: function() {
+        empty: function() {
             list = [];
             this.length = 0;
         },
-        fire: function (i, caller) {
+        call: function (i, caller, fn) {
             if(!i) {
                 i = this.length - 1;
             }
             var callback = list[i];
-            if (isFunction(callback.fn)) {
-                    callback.fn.call(caller || window, callback.data);	
+            
+            if(isFunction(fn)){
+                fn.call(this, caller, callback, i);
+            } else {
+                if (isFunction(callback.fn)) {
+                    callback.fn.call(caller || window, callback.data);
+                }
             }
+            
             if(callback.one){
                 delete list[i];
                 this.length --;
             }
         },
-        process: function (caller) {
+        fire: function (caller, fn) {
             var callback, deletes = [];
 
             for(var i in list){
-                this.fire(i, caller); 
+                this.call(i, caller, fn); 
             }
         }
     };
