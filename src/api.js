@@ -1,4 +1,5 @@
 var sizes = {};
+var unionSizes = {};
 
 $.extend(Breakpoints, {
     defined: false,
@@ -53,14 +54,23 @@ $.extend(Breakpoints, {
         if (size) {
             size.destory();
         }
-        sizes[name] = new Size(name, min || null, max || null, unit || null);
+        return sizes[name] = new Size(name, min || null, max || null, unit || null);
     },
 
     get: function(size) {
         if (sizes.hasOwnProperty(size)) {
             return sizes[size];
         }
+
         return null;
+    },
+
+    getUnion: function(sizes) {
+        if(unionSizes.hasOwnProperty(sizes)) {
+            return unionSizes[sizes];
+        }
+
+        return unionSizes[sizes] = new UnionSize(sizes);
     },
 
     getMin: function(size) {
@@ -97,11 +107,20 @@ $.extend(Breakpoints, {
             data = types;
             return ChangeEvent.on(data, fn, one);
         }
-        var size = this.get(sizes);
+        if(sizes.indexOf(' ')){
+            var union = this.getUnion(sizes);
 
-        if (size) {
-            size.on(types, data, fn, one);
+            if (union) {
+               union.on(types, data, fn, one); 
+            }
+        } else {
+            var size = this.get(sizes);
+
+            if (size) {
+                size.on(types, data, fn, one);
+            }
         }
+        
         return this;
     },
 
@@ -113,11 +132,21 @@ $.extend(Breakpoints, {
         if (sizes === 'change') {
             return ChangeEvent.off(types);
         }
-        var size = this.get(sizes);
 
-        if (size) {
-            size.off(types, fn);
+        if(sizes.indexOf(' ')){
+            var union = this.getUnion(sizes);
+
+            if (union) {
+               union.off(types, fn); 
+            }
+        } else {
+            var size = this.get(sizes);
+
+            if (size) {
+                size.off(types, fn);
+            }
         }
+
         return this;
     }
 });

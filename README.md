@@ -1,4 +1,6 @@
-#[breakpoints.js](https://github.com/amazingSurge/breakpoints.js) - Awesome Breakpoints in JavaScript
+#[breakpoints.js](https://github.com/amazingSurge/breakpoints.js)
+
+![bower](https://img.shields.io/bower/v/breakpoints.js.svg?style=flat-square)
 
 `breakpoints.js` is a lightweight, pure javascript library for attaching callbacks to breakpoints. 
 
@@ -31,7 +33,7 @@ Done!
 Before you try anything, you need to include breakpoints.js in your page.
 
 ```html
-<script src="breakpoints.js" async></script>
+<script src="breakpoints.min.js"></script>
 ```
 
 You may need provide a matchMedia polyfill if you wish to [support old/incapable browsers](#browser-support).
@@ -100,6 +102,51 @@ Check if the current screen is a specific size.
 Breakpoints.is('xs'); // return true or false
 ```
 
+### get
+Return the size object that you can operate it handily.
+
+```javascript
+// get size object
+var sm = Breakpoints.get('sm');
+
+// attach events
+sm.on('enter', function(){
+    // do something
+});
+
+// remove event handler
+sm.off('enter');
+
+// get min width
+sm.min // 768
+
+// get max width
+sm.max // 991
+
+// get media query
+sm.media // "(min-width: 768px) and (max-width: 991px)"
+
+// check if it's current size
+sm.isMatched(); // true or false
+
+// you can do in a chain
+Breakpoints.get('sm').on({
+    enter: function(){
+
+    },
+    leave: function(){
+
+    }
+});
+```
+
+### current
+Return the current screen size object
+
+```javascript
+Breakpoints.current();
+```
+
 ### on
 Attach an event handler function for one or more events to the size
 
@@ -134,6 +181,19 @@ Breakpoints.on('sm', "leave", {
 });
 ```
 
+#### Unite sizes
+
+```javascript
+Breakpoints.on('md lg', {
+    enter: function() {
+        console.info('enter '+ this.name);
+    },
+    leave: function() {
+        console.info('leave '+ this.name);
+    }
+});
+```
+
 ### one
 The handler attached to the size will executed at most once.
 
@@ -165,70 +225,25 @@ Breakpoints.off('lg', {
 Breakpoints.off('lg', 'enter', enterHandler);
 ```
 
-### get
-Return the size object that you can operate it handily.
-
-```javascript
-// get size object
-var sm = Breakpoints.get('sm');
-
-// attach events
-sm.on('enter', function(){
-    // do something
-});
-
-// remove event handler
-sm.off('enter');
-
-// get min width
-sm.min // 768
-
-// get max width
-sm.max // 991
-
-// get media query
-sm.media // "(min-width: 768px) and (max-width: 991px)"
-
-// check if it's current size
-sm.isMatched(); // true or false
-
-// you also do in a chain
-Breakpoints.get('sm').on({
-    enter: function(){
-
-    },
-    leave: function(){
-
-    }
-});
-```
-
-### current
-Return the current screen size object
-
-```javascript
-Breakpoints.current();
-```
-
 ### change
-Bind an event handler to the size change event
+Attach an event handler to the size change event
 
 ```javascript
-// bind change event
+// attach handler to change event
 Breakpoints.on('change', function(){
     console.info('enter ' + this.current.name);
 });
 
-// altrnative bind
+// altrnative example
 var changeHandler = function(){
     // do something 
 };
 Breakpoints.on('change', changeHandler);
 
-// unbind the handler
+// remove the handler
 Breakpoints.off('change', changeHandler);
 
-// unbind all change handlers
+// remove all change handlers
 Breakpoints.off('change');
 ```
 
@@ -246,7 +261,7 @@ review the [guidelines for contributing](CONTRIBUTING.md). Make sure you're usin
 - With some polyfills (like the ones included in [matchMedia.js](https://github.com/paulirish/matchMedia.js/)) Breakpoints works perfect in IE6-9 as well.
 
 
-### Other Projects
+## Other Projects
 
 If you like this project then I encourage you to check out a few of my other hand-selected projects.
 

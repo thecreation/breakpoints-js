@@ -1,4 +1,4 @@
-/*! Breakpoints.js - v0.3.0 - 2015-04-18
+/*! breakpoints.js - v0.4.0 - 2015-04-18
  * https://github.com/amazingSurge/breakpoints.js
  * Copyright (c) 2015 amazingSurge; Licensed GPL */
 (function(document, window, undefined) {
@@ -104,7 +104,7 @@
                 list = [];
                 this.length = 0;
             },
-            call: function(i, caller, fn) {
+            call: function(caller, i, fn) {
                 if (!i) {
                     i = this.length - 1;
                 }
@@ -125,7 +125,7 @@
             },
             fire: function(caller, fn) {
                 for (var i in list) {
-                    this.call(i, caller, fn);
+                    this.call(caller, i, fn);
                 }
             }
         };
@@ -170,7 +170,7 @@
         this.name = name;
         this.media = media;
 
-        return this.initialize.apply(this);
+        this.initialize.apply(this);
     }
 
     MediaQuery.prototype = {
@@ -218,7 +218,7 @@
             if (types in this.callbacks) {
                 this.callbacks[types].add(fn, data, one);
                 if (this.isMatched() && types === 'enter') {
-                    this.callbacks[types].call();
+                    this.callbacks[types].call(this);
                 }
             }
 
@@ -255,9 +255,12 @@
 
         isMatched: function() {
             return this.mql.matches;
+        },
+
+        destory: function() {
+            this.off();
         }
     };
-
     var Size = function(name, min, max, unit) {
         this.name = name;
         this.min = min ? min : 0;
@@ -290,7 +293,31 @@
         }
     });
 
+    var UnionSize = function(names) {
+        this.name = names;
+        this.sizes = [];
+
+        var self = this;
+
+        var media = [];
+        each(names.split(' '), function(i, name) {
+            var size = Breakpoints.get(name);
+            if (size) {
+                self.sizes.push(size);
+                media.push(size.media);
+            }
+        });
+
+        this.media = media.join(',');
+
+        this.initialize.apply(this);
+    };
+
+
+    UnionSize.prototype = MediaQuery.prototype;
+    UnionSize.prototype.constructor = UnionSize;
     var sizes = {};
+    var unionSizes = {};
 
     $.extend(Breakpoints, {
         defined: false,
@@ -345,14 +372,23 @@
             if (size) {
                 size.destory();
             }
-            sizes[name] = new Size(name, min || null, max || null, unit || null);
+            return sizes[name] = new Size(name, min || null, max || null, unit || null);
         },
 
         get: function(size) {
             if (sizes.hasOwnProperty(size)) {
                 return sizes[size];
             }
+
             return null;
+        },
+
+        getUnion: function(sizes) {
+            if (unionSizes.hasOwnProperty(sizes)) {
+                return unionSizes[sizes];
+            }
+
+            return unionSizes[sizes] = new UnionSize(sizes);
         },
 
         getMin: function(size) {
@@ -389,11 +425,20 @@
                 data = types;
                 return ChangeEvent.on(data, fn, one);
             }
-            var size = this.get(sizes);
+            if (sizes.indexOf(' ')) {
+                var union = this.getUnion(sizes);
 
-            if (size) {
-                size.on(types, data, fn, one);
+                if (union) {
+                    union.on(types, data, fn, one);
+                }
+            } else {
+                var size = this.get(sizes);
+
+                if (size) {
+                    size.on(types, data, fn, one);
+                }
             }
+
             return this;
         },
 
@@ -405,11 +450,21 @@
             if (sizes === 'change') {
                 return ChangeEvent.off(types);
             }
-            var size = this.get(sizes);
 
-            if (size) {
-                size.off(types, fn);
+            if (sizes.indexOf(' ')) {
+                var union = this.getUnion(sizes);
+
+                if (union) {
+                    union.off(types, fn);
+                }
+            } else {
+                var size = this.get(sizes);
+
+                if (size) {
+                    size.off(types, fn);
+                }
             }
+
             return this;
         }
     });

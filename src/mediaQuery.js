@@ -2,7 +2,7 @@ var MediaQuery = Breakpoints.mediaQuery = function(name, media) {
     this.name = name;
     this.media = media;
 
-    return this.initialize.apply(this);
+    this.initialize.apply(this);
 }
 
 MediaQuery.prototype = {
@@ -50,7 +50,7 @@ MediaQuery.prototype = {
         if (types in this.callbacks) {
             this.callbacks[types].add(fn, data, one);
             if (this.isMatched() && types === 'enter') {
-                this.callbacks[types].call();
+                this.callbacks[types].call(this);
             }
         }
 
@@ -87,5 +87,9 @@ MediaQuery.prototype = {
 
     isMatched: function() {
         return this.mql.matches;
+    },
+
+    destory: function() {
+        this.off();
     }
 };

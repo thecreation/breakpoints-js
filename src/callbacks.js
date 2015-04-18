@@ -25,7 +25,7 @@ var Callbacks = function() {
             list = [];
             this.length = 0;
         },
-        call: function(i, caller, fn) {
+        call: function(caller, i, fn) {
             if (!i) {
                 i = this.length - 1;
             }
@@ -46,7 +46,7 @@ var Callbacks = function() {
         },
         fire: function(caller, fn) {
             for (var i in list) {
-                this.call(i, caller, fn);
+                this.call(caller, i, fn);
             }
         }
     };
