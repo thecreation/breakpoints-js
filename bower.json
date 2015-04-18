@@ -1,7 +1,8 @@
 {
-  "name": "Breakpoints.js",
+  "name": "breakpoints.js",
   "version": "0.3.0",
-  "main": "dist/Breakpoints.js",
+  "description": "Breakpoints.js is a lightweight, pure javascript library for attaching cllbacks to breakoints.",
+  "main": "dist/breakpoints.js",
   "copyright": "amazingSurge",
   "license": "GPL",
   "ignore": [
@@ -9,12 +10,24 @@
     "node_modules",
     "bower_components",
     "test",
+    "demo",
     "libs",
     "package.json",
     "Gruntfile.js",
     "tests"
   ],
-  "dependencies": {
-    "jquery": ">=1.8.3"
-  }
+  "homepage": "https://github.com/amazingSurge/breakpoints.js",
+  "authors": [
+    "amazingSurge <amazingSurge@yahoo.com>"
+  ],
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "javascript",
+    "breakpoints",
+    "bootstrap",
+    "media query",
+    "matchMedia"
+  ]
 }
