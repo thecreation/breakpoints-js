@@ -36,7 +36,7 @@
             min: 0,
             max: 767
         },
-        // Small devices (tablets
+        // Small devices (tablets)
         sm: {
             min: 768,
             max: 991

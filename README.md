@@ -22,6 +22,10 @@ If you want build from source:
 
 Done!
 
+###Install From Bower
+
+    bower install breakpoints.js
+
 ## Usage
 
 Before you try anything, you need to include breakpoints.js in your page.
@@ -48,7 +52,7 @@ Breakpoints.defaults = {
         min: 0,
         max: 767
     },
-    // Small devices (tablets
+    // Small devices (tablets)
     sm: {
         min: 768,
         max: 991
