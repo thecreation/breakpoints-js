@@ -1,4 +1,4 @@
-#[breakpoints.js](https://github.com/amazingSurge/breakpoints.js) - Awesome Breakpoints in JavaScript
+#[breakpoints.js](https://github.com/amazingSurge/breakpoints.js) ![bower][bower-image] [![devDependency status][devdeps-image]][devdeps-link]
 
 `breakpoints.js` is a lightweight, pure javascript library for attaching callbacks to breakpoints. 
 
@@ -246,7 +246,7 @@ review the [guidelines for contributing](CONTRIBUTING.md). Make sure you're usin
 - With some polyfills (like the ones included in [matchMedia.js](https://github.com/paulirish/matchMedia.js/)) Breakpoints works perfect in IE6-9 as well.
 
 
-### Other Projects
+## Other Projects
 
 If you like this project then I encourage you to check out a few of my other hand-selected projects.
 
@@ -261,3 +261,10 @@ If you like this project then I encourage you to check out a few of my other han
 Copyright (C) 2015 amazingSurge Ltd.
 
 Licensed under [the GPL license](LICENSE-GPL).
+
+
+[bower-image]: https://img.shields.io/bower/v/breakpoints.js.svg?style=flat
+[bower-link]: https://david-dm.org/amazingsurge/breakpoints.js/dev-status.svg
+
+[devdeps-image]: https://img.shields.io/david/dev/amazingsurge/breakpoints.js.svg?style=flat
+[devdeps-link]: https://david-dm.org/amazingsurge/breakpoints.js#info=devDependencies
