@@ -1,7 +1,8 @@
 var sizes = {};
 var unionSizes = {};
 
-$.extend(Breakpoints, {
+
+Breakpoints = extend(Breakpoints, {
     defined: false,
     define: function(values, options) {
         if (this.defined) {
@@ -54,7 +55,9 @@ $.extend(Breakpoints, {
         if (size) {
             size.destory();
         }
-        return sizes[name] = new Size(name, min || null, max || null, unit || null);
+
+        sizes[name] = new Size(name, min || null, max || null, unit || null)
+        return sizes[name];
     },
 
     get: function(size) {
@@ -70,7 +73,9 @@ $.extend(Breakpoints, {
             return unionSizes[sizes];
         }
 
-        return unionSizes[sizes] = new UnionSize(sizes);
+        unionSizes[sizes] = new UnionSize(sizes)
+
+        return unionSizes[sizes];
     },
 
     getMin: function(size) {

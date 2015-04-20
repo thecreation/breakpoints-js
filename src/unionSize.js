@@ -18,6 +18,5 @@ var UnionSize = function(names) {
     this.initialize.apply(this);
 };
 
-
 UnionSize.prototype = MediaQuery.prototype;
 UnionSize.prototype.constructor = UnionSize;

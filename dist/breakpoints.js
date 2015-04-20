@@ -1,4 +1,4 @@
-/*! breakpoints.js - v0.4.0 - 2015-04-18
+/*! breakpoints.js - v0.4.1 - 2015-04-20
  * https://github.com/amazingSurge/breakpoints.js
  * Copyright (c) 2015 amazingSurge; Licensed GPL */
 (function(document, window, undefined) {
@@ -282,7 +282,6 @@
         this.mql.addListener(this.changeListener);
     };
 
-
     Size.prototype = MediaQuery.prototype;
     Size.prototype.constructor = Size;
 
@@ -313,13 +312,14 @@
         this.initialize.apply(this);
     };
 
-
     UnionSize.prototype = MediaQuery.prototype;
     UnionSize.prototype.constructor = UnionSize;
+
     var sizes = {};
     var unionSizes = {};
 
-    $.extend(Breakpoints, {
+
+    Breakpoints = extend(Breakpoints, {
         defined: false,
         define: function(values, options) {
             if (this.defined) {
@@ -372,7 +372,9 @@
             if (size) {
                 size.destory();
             }
-            return sizes[name] = new Size(name, min || null, max || null, unit || null);
+
+            sizes[name] = new Size(name, min || null, max || null, unit || null)
+            return sizes[name];
         },
 
         get: function(size) {
@@ -388,7 +390,9 @@
                 return unionSizes[sizes];
             }
 
-            return unionSizes[sizes] = new UnionSize(sizes);
+            unionSizes[sizes] = new UnionSize(sizes)
+
+            return unionSizes[sizes];
         },
 
         getMin: function(size) {

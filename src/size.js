@@ -19,7 +19,6 @@ var Size = function(name, min, max, unit) {
     this.mql.addListener(this.changeListener);
 };
 
-
 Size.prototype = MediaQuery.prototype;
 Size.prototype.constructor = Size;
 
