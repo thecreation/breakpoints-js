@@ -1,4 +1,4 @@
-/*! breakpoints.js - v0.4.1 - 2015-04-20
+/*! breakpoints.js - v0.4.2 - 2015-04-22
  * https://github.com/amazingSurge/breakpoints.js
  * Copyright (c) 2015 amazingSurge; Licensed GPL */
 (function(document, window, undefined) {
@@ -132,19 +132,19 @@
     };
 
     var ChangeEvent = {
-        target: null,
+        current: null,
         callbacks: new Callbacks(),
         trigger: function(size) {
-            var self = this;
+            var previous = this.current;
+            this.current = size;
             this.callbacks.fire(size, function(caller, callback) {
                 if (isFunction(callback.fn)) {
                     callback.fn.call({
                         current: size,
-                        previous: self.target
+                        previous: previous
                     }, callback.data);
                 }
             });
-            this.target = size;
         },
         one: function(data, fn) {
             return this.on(data, fn, 1);
@@ -277,7 +277,7 @@
             }
         };
         if (this.isMatched()) {
-            ChangeEvent.target = this;
+            ChangeEvent.current = this;
         }
         this.mql.addListener(this.changeListener);
     };
@@ -346,7 +346,7 @@
                 size.destory();
             });
             sizes = {};
-            ChangeEvent.target = null;
+            ChangeEvent.current = null;
         },
 
         is: function(size) {
@@ -412,7 +412,7 @@
         },
 
         current: function() {
-            return ChangeEvent.target;
+            return ChangeEvent.current;
         },
 
         getMedia: function(size) {

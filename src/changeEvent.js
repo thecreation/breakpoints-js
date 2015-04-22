@@ -1,17 +1,17 @@
 var ChangeEvent = {
-    target: null,
+    current: null,
     callbacks: new Callbacks(),
     trigger: function(size) {
-        var self = this;
+        var previous = this.current;
+        this.current = size;
         this.callbacks.fire(size, function(caller, callback) {
             if (isFunction(callback.fn)) {
                 callback.fn.call({
                     current: size,
-                    previous: self.target
+                    previous: previous
                 }, callback.data);
             }
         });
-        this.target = size;
     },
     one: function(data, fn) {
         return this.on(data, fn, 1);

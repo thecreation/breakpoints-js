@@ -29,7 +29,7 @@ Breakpoints = extend(Breakpoints, {
             size.destory();
         });
         sizes = {};
-        ChangeEvent.target = null;
+        ChangeEvent.current = null;
     },
 
     is: function(size) {
@@ -95,7 +95,7 @@ Breakpoints = extend(Breakpoints, {
     },
 
     current: function() {
-        return ChangeEvent.target;
+        return ChangeEvent.current;
     },
 
     getMedia: function(size) {

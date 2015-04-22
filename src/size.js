@@ -14,7 +14,7 @@ var Size = function(name, min, max, unit) {
         }
     };
     if (this.isMatched()) {
-        ChangeEvent.target = this;
+        ChangeEvent.current = this;
     }
     this.mql.addListener(this.changeListener);
 };
