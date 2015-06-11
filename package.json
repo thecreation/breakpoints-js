@@ -6,11 +6,12 @@
   "homepage": "https://github.com/amazingSurge/breakpoints.js",
   "author": {
     "name": "amazingSurge",
-    "email": "amazingSurge@yahoo.com"
+    "email": "amazingSurge@yahoo.com",
+    "url": "amazingSurge.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/amazingSurge/breakpoints.js.git"
+    "url": "git@github.com:amazingSurge/breakpoints.js.git"
   },
   "bugs": "https://github.com/amazingSurge/breakpoints.js/issues",
   "licenses": [

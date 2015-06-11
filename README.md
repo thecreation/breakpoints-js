@@ -271,13 +271,13 @@ If you like this project then I encourage you to check out a few of my other han
 
 ## Copyright and license
 
-Copyright (C) 2015 amazingSurge Ltd.
+Copyright (C) 2015 amazingSurge.
 
 Licensed under [the GPL license](LICENSE-GPL).
 
 
 [bower-image]: https://img.shields.io/bower/v/breakpoints.js.svg?style=flat
-[bower-link]: https://david-dm.org/amazingsurge/breakpoints.js/dev-status.svg
+[bower-link]: https://david-dm.org/amazingSurge/breakpoints.js/dev-status.svg
 
-[devdeps-image]: https://img.shields.io/david/dev/amazingsurge/breakpoints.js.svg?style=flat
-[devdeps-link]: https://david-dm.org/amazingsurge/breakpoints.js#info=devDependencies
+[devdeps-image]: https://img.shields.io/david/dev/amazingSurge/breakpoints.js.svg?style=flat
+[devdeps-link]: https://david-dm.org/amazingSurge/breakpoints.js#info=devDependencies
