@@ -1,7 +1,7 @@
 /**
 * breakpoints.js
 * Breakpoints.js is a lightweight, pure javascript library for attaching callbacks to breakpoints.
-* Compiled: Thu Aug 04 2016 02:20:37 GMT+0800 (CST)
+* Compiled: Thu Aug 04 2016 02:21:21 GMT+0800 (CST)
 * @version v1.0.0
 * @link https://github.com/amazingSurge/breakpoints.js
 * @copyright LGPL
