@@ -1,53 +1,59 @@
-var Callbacks = function() {
-    var list = [];
+import util from './util';
 
-    return {
-        length: 0,
-        add: function(fn, data, one) {
-            list.push({
-                fn: fn,
-                data: data || {},
-                one: one || 0
-            });
+export default class Callbacks {
+  constructor(){
+    this.length = 0;
+    this.list = [];
+  }
 
-            this.length++;
-        },
-        remove: function(fn) {
-            for (var i = 0; i < list.length; i++) {
-                if (list[i].fn === fn) {
-                    list.splice(i, 1);
-                    this.length--;
-                    i--;
-                }
-            }
-        },
-        empty: function() {
-            list = [];
-            this.length = 0;
-        },
-        call: function(caller, i, fn) {
-            if (!i) {
-                i = this.length - 1;
-            }
-            var callback = list[i];
+  add(fn, data = {}, one = false) {
+    this.list.push({
+      fn,
+      data: data,
+      one: one
+    });
 
-            if (isFunction(fn)) {
-                fn.call(this, caller, callback, i);
-            } else {
-                if (isFunction(callback.fn)) {
-                    callback.fn.call(caller || window, callback.data);
-                }
-            }
+    this.length++;
+  }
 
-            if (callback.one) {
-                delete list[i];
-                this.length--;
-            }
-        },
-        fire: function(caller, fn) {
-            for (var i in list) {
-                this.call(caller, i, fn);
-            }
-        }
-    };
-};
+  remove(fn) {
+    for (let i = 0; i < this.list.length; i++) {
+      if (this.list[i].fn === fn) {
+        this.list.splice(i, 1);
+        this.length--;
+        i--;
+      }
+    }
+  }
+
+  empty() {
+    this.list = [];
+    this.length = 0;
+  }
+
+  call(caller, i, fn) {
+    if (!i) {
+      i = this.length - 1;
+    }
+    let callback = this.list[i];
+
+    if (util.isFunction(fn)) {
+      fn.call(this, caller, callback, i);
+    } else if (util.isFunction(callback.fn)) {
+      callback.fn.call(caller || window, callback.data);
+    }
+
+    if (callback.one) {
+      delete this.list[i];
+      this.length--;
+    }
+  }
+
+  fire(caller, fn) {
+    for (let i in this.list) {
+      if(this.list.hasOwnProperty(i)){
+        this.call(caller, i, fn);
+      }
+    }
+  }
+}

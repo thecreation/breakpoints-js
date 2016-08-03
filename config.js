@@ -1,0 +1,90 @@
+'use strict';
+
+import fs from 'graceful-fs';
+import minimist from 'minimist';
+
+export default {
+  getConfig: function(pkg, src, dest) {
+    return {
+      version: pkg.version,
+      name: pkg.name,
+      title: pkg.title,
+      description: pkg.description,
+      author: pkg.author,
+      banner: `/**
+* ${pkg.title}
+* ${pkg.description}
+* Compiled: ${Date()}
+* @version v${pkg.version}
+* @link ${pkg.homepage}
+* @copyright ${pkg.license}
+*/
+`,
+      // basic locations
+      paths: {
+        root: './',
+        srcDir: `${src}/`,
+        destDir: `${dest}/`,
+      },
+
+      scripts: {
+        entry: 'breakpoints.js',
+        files: '**/*.js',
+        src: `${src}`,
+        dest: `${dest}`,
+        prodSourcemap: false,
+        test: './test',
+        gulp: './gulp'
+      },
+
+      archive: {
+        src: `${dest}/**/*`,
+        dest: './archives/',
+        zip: {}
+      },
+
+      browser: {
+        baseDir: './',
+        startPath: "demo/index.html",
+        browserPort: 3000,
+        UIPort: 3001,
+        testPort: 3002,
+      },
+
+      notify: {
+        title: pkg.title
+      },
+
+      test: {},
+    };
+  },
+
+  init: function() {
+    const pkg = JSON.parse(fs.readFileSync('./package.json', { encoding: 'utf-8' }));
+
+    Object.assign(this, {
+      args: minimist(process.argv.slice(2), {
+        string: 'env',
+        default: {
+          env: process.env.NODE_ENV || 'dev'
+        }
+      })
+    });
+
+    if (this.args.env === 'dev') {
+      this.dev = true;
+    }
+
+    if(typeof this.deploy === 'undefined') {
+      this.deploy = false;
+    }
+
+    let src = 'src';
+    let dest = 'dist';
+
+    Object.assign(this, this.getConfig(pkg, src, dest));
+
+    return this;
+  }
+
+}.init();

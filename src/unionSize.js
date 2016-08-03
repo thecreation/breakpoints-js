@@ -1,22 +1,20 @@
-var UnionSize = function(names) {
-    this.name = names;
-    this.sizes = [];
+import MediaQuery from './mediaQuery';
+import Breakpoints from './breakpoints';
+import util from './util';
 
-    var self = this;
+export default class UnionSize extends MediaQuery {
+  constructor(names) {
+    let sizes = [];
+    let media = [];
 
-    var media = [];
-    each(names.split(' '), function(i, name){
-        var size = Breakpoints.get(name);
-        if(size){
-            self.sizes.push(size);
-            media.push(size.media);
-        }
+    util.each(names.split(' '), (i, name) => {
+      let size = Breakpoints.get(name);
+      if(size){
+        sizes.push(size);
+        media.push(size.media);
+      }
     });
 
-    this.media = media.join(',');
-
-    this.initialize.apply(this);
-};
-
-UnionSize.prototype = MediaQuery.prototype;
-UnionSize.prototype.constructor = UnionSize;
+    super(names, media.join(','));
+  }
+}

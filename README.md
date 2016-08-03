@@ -17,8 +17,9 @@ If you want build from source:
 
     git clone git@github.com:amazingSurge/breakpoints.js.git
     cd breakpoints.js
-    sudo npm install
-    grunt
+    npm install
+    npm install -g gulp-cli babel-cli
+    gulp build
 
 Done!
 
@@ -273,7 +274,7 @@ If you like this project then I encourage you to check out a few of my other han
 
 Copyright (C) 2015 amazingSurge.
 
-Licensed under [the GPL license](LICENSE-GPL).
+Licensed under [the LGPL license](LICENSE).
 
 
 [bower-image]: https://img.shields.io/bower/v/breakpoints.js.svg?style=flat
