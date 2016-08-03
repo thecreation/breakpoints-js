@@ -26,8 +26,7 @@ export function bundler(src = config.scripts.src, dest = config.scripts.dest, en
       .on('error', handleErrors)
       .pipe(plumber({errorHandler: handleErrors}))
       .pipe(rollup({
-        entry: `${src}/${entry}`,
-        cache: false
+        entry: `${src}/${entry}`
       }))
       .pipe(header(config.banner))
       .pipe(rename({

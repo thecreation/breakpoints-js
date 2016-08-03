@@ -1,8 +1,8 @@
 /**
 * breakpoints.js
 * Breakpoints.js is a lightweight, pure javascript library for attaching callbacks to breakpoints.
-* Compiled: Thu Aug 04 2016 02:21:21 GMT+0800 (CST)
-* @version v1.0.0
+* Compiled: Thu Aug 04 2016 06:15:20 GMT+0800 (CST)
+* @version v1.0.1
 * @link https://github.com/amazingSurge/breakpoints.js
 * @copyright LGPL
 */
@@ -20,7 +20,9 @@
   }
 })(this,
 
-  function(exports) { 'use strict';
+  function(exports) {
+    'use strict';
+
     Object.defineProperty(exports, "__esModule", {
       value: true
     });
@@ -37,6 +39,7 @@
       if (typeof superClass !== "function" && superClass !== null) {
         throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
       }
+
       subClass.prototype = Object.create(superClass && superClass.prototype, {
         constructor: {
           value: subClass,
@@ -79,6 +82,7 @@
         return Constructor;
       };
     }();
+
     var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ?
 
       function(obj) {
@@ -89,33 +93,29 @@
       function(obj) {
         return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
       };
+
     var defaults = {
       // Extra small devices (phones)
       xs: {
         min: 0,
         max: 767
       },
-
       // Small devices (tablets)
       sm: {
         min: 768,
         max: 991
       },
-
       // Medium devices (desktops)
       md: {
         min: 992,
         max: 1199
       },
-
       // Large devices (large desktops)
       lg: {
         min: 1200,
         max: Infinity
       }
     };
-
-
 
     var util = {
       each: function each(obj, fn) {
@@ -145,34 +145,32 @@
         return obj;
       }
     };
+
     var Callbacks = function() {
       function Callbacks() {
         _classCallCheck(this, Callbacks);
+
         this.length = 0;
         this.list = [];
       }
 
       _createClass(Callbacks, [{
         key: 'add',
-        value: function add(
-
-          fn) {
+        value: function add(fn) {
           var data = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
           var one = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+
           this.list.push({
             fn: fn,
             data: data,
             one: one
           });
 
-
           this.length++;
         }
       }, {
         key: 'remove',
-        value: function remove(
-
-          fn) {
+        value: function remove(fn) {
           for (var i = 0; i < this.list.length; i++) {
 
             if (this.list[i].fn === fn) {
@@ -190,9 +188,7 @@
         }
       }, {
         key: 'call',
-        value: function call(
-
-          caller, i, fn) {
+        value: function call(caller, i, fn) {
           if (!i) {
             i = this.length - 1;
           }
@@ -211,9 +207,7 @@
         }
       }, {
         key: 'fire',
-        value: function fire(
-
-          caller, fn) {
+        value: function fire(caller, fn) {
           for (var i in this.list) {
 
             if (this.list.hasOwnProperty(i)) {
@@ -225,7 +219,6 @@
 
       return Callbacks;
     }();
-
 
     var ChangeEvent = {
       current: null,
@@ -240,8 +233,7 @@
               callback.fn.call({
                 current: size,
                 previous: previous
-              },
-                callback.data);
+              }, callback.data);
             }
           }
         );
@@ -267,9 +259,11 @@
         }
       }
     };
+
     var MediaQuery = function() {
       function MediaQuery(name, media) {
         _classCallCheck(this, MediaQuery);
+
         this.name = name;
         this.media = media;
 
@@ -284,7 +278,6 @@
             leave: new Callbacks()
           };
 
-
           this.mql = window.matchMedia && window.matchMedia(this.media) || {
             matches: false,
             media: this.media,
@@ -295,7 +288,6 @@
               // do nothing
             }
           };
-
 
           var that = this;
           this.mqlListener = function(mql) {
@@ -308,10 +300,9 @@
         }
       }, {
         key: 'on',
-        value: function on(
-
-          types, data, fn) {
+        value: function on(types, data, fn) {
           var one = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
+
           var type = void 0;
 
           if ((typeof types === 'undefined' ? 'undefined' : _typeof(types)) === 'object') {
@@ -348,16 +339,12 @@
         }
       }, {
         key: 'one',
-        value: function one(
-
-          types, data, fn) {
+        value: function one(types, data, fn) {
           return this.on(types, data, fn, 1);
         }
       }, {
         key: 'off',
-        value: function off(
-
-          types, fn) {
+        value: function off(types, fn) {
           var type = void 0;
 
           if ((typeof types === 'undefined' ? 'undefined' : _typeof(types)) === 'object') {
@@ -401,7 +388,6 @@
       return MediaQuery;
     }();
 
-
     var MediaBuilder = {
       min: function min(_min, unit) {
         return '(min-width: ' + _min + unit + ')';
@@ -428,16 +414,20 @@
         return this.between(min, max, unit);
       }
     };
+
     var Size = function(_MediaQuery) {
       _inherits(Size, _MediaQuery);
 
-      function Size(name) { var min = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+      function Size(name) {
+        var min = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
         var max = arguments.length <= 2 || arguments[2] === undefined ? Infinity : arguments[2];
         var unit = arguments.length <= 3 || arguments[3] === undefined ? 'px' : arguments[3];
+
         _classCallCheck(this, Size);
+
         var media = MediaBuilder.get(min, max, unit);
-        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Size).call(this,
-          name, media));
+
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Size).call(this, name, media));
 
         _this.min = min;
         _this.max = max;
@@ -469,11 +459,13 @@
 
       return Size;
     }(MediaQuery);
+
     var UnionSize = function(_MediaQuery2) {
       _inherits(UnionSize, _MediaQuery2);
 
       function UnionSize(names) {
         _classCallCheck(this, UnionSize);
+
         var sizes = [];
         var media = [];
 
@@ -489,14 +481,11 @@
           }
         );
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(UnionSize).call(this,
-
-          names, media.join(',')));
+        return _possibleConstructorReturn(this, Object.getPrototypeOf(UnionSize).call(this, names, media.join(',')));
       }
 
       return UnionSize;
     }(MediaQuery);
-
 
     var sizes = {};
     var unionSizes = {};
@@ -505,12 +494,13 @@
       for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
         args[_key] = arguments[_key];
       }
+
       Breakpoints.define.apply(Breakpoints, args);
     };
 
     Breakpoints.defaults = defaults;
 
-    Breakpoints = Object.assign(Breakpoints, {
+    Breakpoints = util.extend(Breakpoints, {
       defined: false,
       define: function define(values) {
         var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
@@ -523,7 +513,7 @@
           values = Breakpoints.defaults;
         }
 
-        this.options = Object.assign(options, {
+        this.options = util.extend(options, {
           unit: 'px'
         });
 
@@ -536,7 +526,6 @@
 
         this.defined = true;
       },
-
       destory: function destory() {
         util.each(sizes,
 
@@ -547,7 +536,6 @@
         sizes = {};
         ChangeEvent.current = null;
       },
-
       is: function is(size) {
         var breakpoint = this.get(size);
 
@@ -558,8 +546,6 @@
 
         return breakpoint.isMatched();
       },
-
-
       all: function all() {
         var names = [];
         util.each(sizes,
@@ -572,10 +558,12 @@
         return names;
       },
 
+
       set: function set(name) {
         var min = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
         var max = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
         var unit = arguments.length <= 3 || arguments[3] === undefined ? null : arguments[3];
+
         var size = this.get(name);
 
         if (size) {
@@ -606,7 +594,6 @@
 
         return unionSizes[sizes];
       },
-
       getMin: function getMin(size) {
         var obj = this.get(size);
 
@@ -617,7 +604,6 @@
 
         return null;
       },
-
       getMax: function getMax(size) {
         var obj = this.get(size);
 
@@ -628,11 +614,9 @@
 
         return null;
       },
-
       current: function current() {
         return ChangeEvent.current;
       },
-
       getMedia: function getMedia(size) {
         var obj = this.get(size);
 
@@ -643,9 +627,9 @@
 
         return null;
       },
-
       on: function on(sizes, types, data, fn) {
         var one = arguments.length <= 4 || arguments[4] === undefined ? false : arguments[4];
+
         sizes = sizes.trim();
 
         if (sizes === 'change') {
@@ -671,11 +655,9 @@
 
         return this;
       },
-
       one: function one(sizes, types, data, fn) {
         return this.on(sizes, types, data, fn, true);
       },
-
       off: function off(sizes, types, fn) {
         sizes = sizes.trim();
 
@@ -702,8 +684,8 @@
       }
     });
 
-
     var Breakpoints$1 = Breakpoints;
+
     exports.default = Breakpoints$1;
   }
 );

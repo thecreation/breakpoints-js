@@ -15,7 +15,7 @@ let Breakpoints = window.Breakpoints = function(...args) {
 
 Breakpoints.defaults = defaults;
 
-Breakpoints = Object.assign(Breakpoints, {
+Breakpoints = util.extend(Breakpoints, {
   defined: false,
   define(values, options = {}) {
     if (this.defined) {
@@ -26,7 +26,7 @@ Breakpoints = Object.assign(Breakpoints, {
       values = Breakpoints.defaults;
     }
 
-    this.options = Object.assign(options, {
+    this.options = util.extend(options, {
       unit: 'px'
     });
 

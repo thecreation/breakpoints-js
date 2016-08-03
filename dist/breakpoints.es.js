@@ -1,8 +1,8 @@
 /**
 * breakpoints.js
 * Breakpoints.js is a lightweight, pure javascript library for attaching callbacks to breakpoints.
-* Compiled: Thu Aug 04 2016 02:21:21 GMT+0800 (CST)
-* @version v1.0.0
+* Compiled: Thu Aug 04 2016 06:15:20 GMT+0800 (CST)
+* @version v1.0.1
 * @link https://github.com/amazingSurge/breakpoints.js
 * @copyright LGPL
 */
@@ -324,7 +324,7 @@ let Breakpoints = window.Breakpoints = function(...args) {
 
 Breakpoints.defaults = defaults;
 
-Breakpoints = Object.assign(Breakpoints, {
+Breakpoints = util.extend(Breakpoints, {
   defined: false,
   define(values, options = {}) {
     if (this.defined) {
@@ -335,7 +335,7 @@ Breakpoints = Object.assign(Breakpoints, {
       values = Breakpoints.defaults;
     }
 
-    this.options = Object.assign(options, {
+    this.options = util.extend(options, {
       unit: 'px'
     });
 

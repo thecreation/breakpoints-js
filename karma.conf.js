@@ -1,4 +1,8 @@
 // Karma configuration
+import babel from 'rollup-plugin-babel';
+import babelrc from 'babelrc-rollup';
+import istanbul from 'rollup-plugin-istanbul';
+import babel_istanbul from 'babel-istanbul';
 
 module.exports = function(config) {
   config.set({
@@ -6,11 +10,9 @@ module.exports = function(config) {
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: '',
 
-
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha', 'browserify', 'sinon-chai'],
-
+    frameworks: ['mocha', 'sinon-chai'],
 
     // list of files / patterns to load in the browser
     files: [
@@ -20,35 +22,9 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      "src/js/**/*.js": ["browserify"],
-      "test/spec/**/*.spec.js": ["browserify", "coverage"]
-    },
-
-    // babelPreprocessor: {
-    //   options: {
-    //     presets: ['es2015'],
-    //   }
-    // },
-
-
-    // Browserify configuration
-    // The coverage command goes here instead of the preprocessor because we need it to work with browserify
-    browserify: {
-      debug: true,
-      transform: [
-        [
-          'babelify',{
-            presets: 'es2015'
-          }
-        ], [
-          'browserify-istanbul',
-          {
-            instrumenterConfig: {
-              embedSource: true
-            }
-          }
-        ]
-      ]
+      // "dist/**/*.es.js": ["rollup"],
+      "src/**/*.js": ["rollup", "coverage"],
+      "test/spec/**/*.spec.js": ["rollup"]
     },
 
     // optionally, configure the reporter
@@ -111,10 +87,21 @@ module.exports = function(config) {
       'karma-firefox-launcher',
       'karma-phantomjs-launcher',
       'karma-mocha-reporter',
-      'karma-browserify',
       'karma-coverage',
-      'karma-babel-preprocessor'
+      'karma-rollup-plugin'
     ],
+
+    rollupPreprocessor: {
+      plugins: [
+        babel(babelrc()),
+        istanbul({
+            include: ['src/**/*.js'],
+            exclude: ['test/spec/**/*.spec.js', 'node_modules/**'],
+            // instrumenter: babel_istanbul
+        }),
+      ],
+      sourceMap: 'inline'
+    },
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
