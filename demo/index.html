@@ -11,16 +11,17 @@
 <meta name="viewport" content="width=device-width">
 
 <link rel="stylesheet" href="css/normalize.css">
-<link rel="stylesheet" href="css/main.css">      
+<link rel="stylesheet" href="css/main.css">
 
 <script src="../libs/jquery/jquery.js"></script>
 <script src="js/jquery.toc.js"></script>
 <script src="js/prism.js"></script>
+<script src="js/respond.matchmedia.addListener.min.js"></script>
 <script src="../dist/breakpoints.js"></script>
 
 <script type="text/javascript">
 (function(){
-    Breakpoints();
+    new Breakpoints();
 })();
 </script>
 
@@ -59,7 +60,7 @@
             max: Infinity
         }
 };</code></pre>
-    
+
     <p>You can set up your own breakpoints when initialize:</p>
     <pre class="language-javascript"><code>&lt;script type=&quot;text/javascript&quot;&gt;
     Breakpoints({
@@ -299,7 +300,7 @@ Breakpoints.one('md', 'enter', function(){
 Breakpoints.off('sm');
 
 // remove all enter type events bind to md size
-Breakpoints.off('md', 'enter'); 
+Breakpoints.off('md', 'enter');
 
 // remove specific event handler
 var enterHandler = function(){};
@@ -322,11 +323,12 @@ Breakpoints.off('lg', 'enter', enterHandler);</code></pre>
 // attach handler to change event
 Breakpoints.on('change', function(){
     console.info('enter ' + this.current.name);
+    console.info('leave ' + this.previous.name);
 });
 
 // altrnative example
 var changeHandler = function(){
-    // do something 
+    // do something
 };
 Breakpoints.on('change', changeHandler);
 

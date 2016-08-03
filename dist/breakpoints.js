@@ -1,476 +1,709 @@
-/*! breakpoints.js - v0.4.2 - 2015-04-22
- * https://github.com/amazingSurge/breakpoints.js
- * Copyright (c) 2015 amazingSurge; Licensed GPL */
-(function(document, window, undefined) {
-    "use strict";
+/**
+* breakpoints.js
+* Breakpoints.js is a lightweight, pure javascript library for attaching callbacks to breakpoints.
+* Compiled: Thu Aug 04 2016 02:10:22 GMT+0800 (CST)
+* @version v1.0.0
+* @link https://github.com/amazingSurge/breakpoints.js
+* @copyright MIT
+*/
+(function(global, factory) {
+  if (typeof define === "function" && define.amd) {
+    define(['exports'], factory);
+  } else if (typeof exports !== "undefined") {
+    factory(exports);
+  } else {
+    var mod = {
+      exports: {}
+    };
+    factory(mod.exports);
+    global.breakpoints = mod.exports;
+  }
+})(this,
 
-    var Breakpoints = window.Breakpoints = function() {
-        Breakpoints.define.apply(Breakpoints, arguments);
+  function(exports) { 'use strict';
+    Object.defineProperty(exports, "__esModule", {
+      value: true
+    });
+
+    function _possibleConstructorReturn(self, call) {
+      if (!self) {
+        throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+      }
+
+      return call && (typeof call === "object" || typeof call === "function") ? call : self;
+    }
+
+    function _inherits(subClass, superClass) {
+      if (typeof superClass !== "function" && superClass !== null) {
+        throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+      }
+      subClass.prototype = Object.create(superClass && superClass.prototype, {
+        constructor: {
+          value: subClass,
+          enumerable: false,
+          writable: true,
+          configurable: true
+        }
+      });
+
+      if (superClass)
+        Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+    }
+
+    function _classCallCheck(instance, Constructor) {
+      if (!(instance instanceof Constructor)) {
+        throw new TypeError("Cannot call a class as a function");
+      }
+    }
+
+    var _createClass = function() {
+      function defineProperties(target, props) {
+        for (var i = 0; i < props.length; i++) {
+          var descriptor = props[i];
+          descriptor.enumerable = descriptor.enumerable || false;
+          descriptor.configurable = true;
+
+          if ("value" in descriptor)
+            descriptor.writable = true;
+          Object.defineProperty(target, descriptor.key, descriptor);
+        }
+      }
+
+      return function(Constructor, protoProps, staticProps) {
+        if (protoProps)
+          defineProperties(Constructor.prototype, protoProps);
+
+        if (staticProps)
+          defineProperties(Constructor, staticProps);
+
+        return Constructor;
+      };
+    }();
+    var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ?
+
+      function(obj) {
+        return typeof obj;
+      }
+      :
+
+      function(obj) {
+        return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
+      };
+    var defaults = {
+      // Extra small devices (phones)
+      xs: {
+        min: 0,
+        max: 767
+      },
+
+      // Small devices (tablets)
+      sm: {
+        min: 768,
+        max: 991
+      },
+
+      // Medium devices (desktops)
+      md: {
+        min: 992,
+        max: 1199
+      },
+
+      // Large devices (large desktops)
+      lg: {
+        min: 1200,
+        max: Infinity
+      }
     };
 
-    function each(obj, fn) {
-        var continues;
+
+
+    var util = {
+      each: function each(obj, fn) {
+        var continues = void 0;
 
         for (var i in obj) {
+
+          if ((typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) !== 'object' || obj.hasOwnProperty(i)) {
             continues = fn(i, obj[i]);
+
             if (continues === false) {
-                break; //allow early exit
+              break; //allow early exit
             }
+          }
         }
-    }
+      },
 
-    function isFunction(obj) {
-        return typeof obj == 'function' || false;
-    }
+      isFunction: function isFunction(obj) {
+        return typeof obj === 'function' || false;
+      },
 
-    function extend(obj, source) {
+      extend: function extend(obj, source) {
         for (var property in source) {
-            obj[property] = source[property];
+          obj[property] = source[property];
         }
+
         return obj;
-    }
-
-    Breakpoints.defaults = {
-        // Extra small devices (phones)
-        xs: {
-            min: 0,
-            max: 767
-        },
-        // Small devices (tablets)
-        sm: {
-            min: 768,
-            max: 991
-        },
-        // Medium devices (desktops)
-        md: {
-            min: 992,
-            max: 1199
-        },
-        // Large devices (large desktops)
-        lg: {
-            min: 1200,
-            max: Infinity
-        }
+      }
     };
-
-    var MediaBuilder = Breakpoints.mediaBuilder = {
-        min: function(min, unit) {
-            return '(min-width: ' + min + unit + ')';
-        },
-        max: function(max, unit) {
-            return '(max-width: ' + max + unit + ')';
-        },
-        between: function(min, max, unit) {
-            return '(min-width: ' + min + unit + ') and (max-width: ' + max + unit + ')';
-        },
-        get: function(min, max, unit) {
-            if (!unit) {
-                unit = 'px';
-            }
-            if (min === 0) {
-                return this.max(max, unit);
-            }
-            if (max === Infinity) {
-                return this.min(min, unit);
-            }
-            return this.between(min, max, unit);
-        }
-    };
-
     var Callbacks = function() {
-        var list = [];
+      function Callbacks() {
+        _classCallCheck(this, Callbacks);
+        this.length = 0;
+        this.list = [];
+      }
 
-        return {
-            length: 0,
-            add: function(fn, data, one) {
-                list.push({
-                    fn: fn,
-                    data: data || {},
-                    one: one || 0
-                });
+      _createClass(Callbacks, [{
+        key: 'add',
+        value: function add(
 
-                this.length++;
-            },
-            remove: function(fn) {
-                for (var i = 0; i < list.length; i++) {
-                    if (list[i].fn === fn) {
-                        list.splice(i, 1);
-                        this.length--;
-                        i--;
-                    }
-                }
-            },
-            empty: function() {
-                list = [];
-                this.length = 0;
-            },
-            call: function(caller, i, fn) {
-                if (!i) {
-                    i = this.length - 1;
-                }
-                var callback = list[i];
+          fn) {
+          var data = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+          var one = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+          this.list.push({
+            fn: fn,
+            data: data,
+            one: one
+          });
 
-                if (isFunction(fn)) {
-                    fn.call(this, caller, callback, i);
-                } else {
-                    if (isFunction(callback.fn)) {
-                        callback.fn.call(caller || window, callback.data);
-                    }
-                }
 
-                if (callback.one) {
-                    delete list[i];
-                    this.length--;
-                }
-            },
-            fire: function(caller, fn) {
-                for (var i in list) {
-                    this.call(caller, i, fn);
-                }
+          this.length++;
+        }
+      }, {
+        key: 'remove',
+        value: function remove(
+
+          fn) {
+          for (var i = 0; i < this.list.length; i++) {
+
+            if (this.list[i].fn === fn) {
+              this.list.splice(i, 1);
+              this.length--;
+              i--;
             }
-        };
-    };
+          }
+        }
+      }, {
+        key: 'empty',
+        value: function empty() {
+          this.list = [];
+          this.length = 0;
+        }
+      }, {
+        key: 'call',
+        value: function call(
+
+          caller, i, fn) {
+          if (!i) {
+            i = this.length - 1;
+          }
+          var callback = this.list[i];
+
+          if (util.isFunction(fn)) {
+            fn.call(this, caller, callback, i);
+          } else if (util.isFunction(callback.fn)) {
+            callback.fn.call(caller || window, callback.data);
+          }
+
+          if (callback.one) {
+            delete this.list[i];
+            this.length--;
+          }
+        }
+      }, {
+        key: 'fire',
+        value: function fire(
+
+          caller, fn) {
+          for (var i in this.list) {
+
+            if (this.list.hasOwnProperty(i)) {
+              this.call(caller, i, fn);
+            }
+          }
+        }
+      }]);
+
+      return Callbacks;
+    }();
+
 
     var ChangeEvent = {
-        current: null,
-        callbacks: new Callbacks(),
-        trigger: function(size) {
-            var previous = this.current;
-            this.current = size;
-            this.callbacks.fire(size, function(caller, callback) {
-                if (isFunction(callback.fn)) {
-                    callback.fn.call({
-                        current: size,
-                        previous: previous
-                    }, callback.data);
-                }
-            });
-        },
-        one: function(data, fn) {
-            return this.on(data, fn, 1);
-        },
-        on: function(data, fn, /*INTERNAL*/ one) {
-            if (fn == null && isFunction(data)) {
-                fn = data;
-                data = undefined;
-            }
-            if (!isFunction(fn)) {
-                return this;
-            }
-            this.callbacks.add(fn, data, one);
-        },
-        off: function(fn) {
-            if (fn == null) {
-                this.callbacks.empty();
-            }
-        }
-    };
+      current: null,
+      callbacks: new Callbacks(),
+      trigger: function trigger(size) {
+        var previous = this.current;
+        this.current = size;
+        this.callbacks.fire(size,
 
-    var MediaQuery = Breakpoints.mediaQuery = function(name, media) {
+          function(caller, callback) {
+            if (util.isFunction(callback.fn)) {
+              callback.fn.call({
+                current: size,
+                previous: previous
+              },
+                callback.data);
+            }
+          }
+        );
+      },
+      one: function one(data, fn) {
+        return this.on(data, fn, true);
+      },
+      on: function on(data, fn) {
+        var one = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+
+        if (typeof fn === 'undefined' && util.isFunction(data)) {
+          fn = data;
+          data = undefined;
+        }
+
+        if (util.isFunction(fn)) {
+          this.callbacks.add(fn, data, one);
+        }
+      },
+      off: function off(fn) {
+        if (typeof fn === 'undefined') {
+          this.callbacks.empty();
+        }
+      }
+    };
+    var MediaQuery = function() {
+      function MediaQuery(name, media) {
+        _classCallCheck(this, MediaQuery);
         this.name = name;
         this.media = media;
 
-        this.initialize.apply(this);
-    }
+        this.initialize();
+      }
 
-    MediaQuery.prototype = {
-        constructor: MediaQuery,
-        initialize: function() {
-            this.callbacks = {
-                enter: new Callbacks(),
-                leave: new Callbacks()
-            };
+      _createClass(MediaQuery, [{
+        key: 'initialize',
+        value: function initialize() {
+          this.callbacks = {
+            enter: new Callbacks(),
+            leave: new Callbacks()
+          };
 
-            this.mql = (window.matchMedia && window.matchMedia(this.media)) || {
-                matches: false,
-                media: this.media,
-                addListener: function() {},
-                removeListener: function() {}
-            };
 
-            var self = this;
-            this.mqlListener = function(mql) {
-                var type = (mql.matches && 'enter') || 'leave';
-
-                self.callbacks[type].fire(self);
-            };
-            this.mql.addListener(this.mqlListener);
-        },
-
-        on: function(types, data, fn, /*INTERNAL*/ one) {
-            var type;
-            if (typeof types === "object") {
-                for (type in types) {
-                    this.on(type, data, types[type], one);
-                }
-                return this;
+          this.mql = window.matchMedia && window.matchMedia(this.media) || {
+            matches: false,
+            media: this.media,
+            addListener: function addListener() {
+              // do nothing
+            },
+            removeListener: function removeListener() {
+              // do nothing
             }
+          };
 
-            if (fn == null && isFunction(data)) {
-                fn = data;
-                data = undefined;
-            }
 
-            if (!isFunction(fn)) {
-                return this;
-            }
+          var that = this;
+          this.mqlListener = function(mql) {
+            var type = mql.matches && 'enter' || 'leave';
 
-            if (types in this.callbacks) {
-                this.callbacks[types].add(fn, data, one);
-                if (this.isMatched() && types === 'enter') {
-                    this.callbacks[types].call(this);
-                }
+            that.callbacks[type].fire(that);
+          }
+          ;
+          this.mql.addListener(this.mqlListener);
+        }
+      }, {
+        key: 'on',
+        value: function on(
+
+          types, data, fn) {
+          var one = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
+          var type = void 0;
+
+          if ((typeof types === 'undefined' ? 'undefined' : _typeof(types)) === 'object') {
+
+            for (type in types) {
+
+              if (types.hasOwnProperty(type)) {
+                this.on(type, data, types[type], one);
+              }
             }
 
             return this;
-        },
+          }
 
-        one: function(types, data, fn) {
-            return this.on(types, data, fn, 1);
-        },
+          if (typeof fn === 'undefined' && util.isFunction(data)) {
+            fn = data;
+            data = undefined;
+          }
 
-        off: function(types, fn) {
-            var type;
-            if (typeof types === "object") {
-                for (type in types) {
-                    this.off(type, types[type]);
-                }
-                return this;
+          if (!util.isFunction(fn)) {
+
+            return this;
+          }
+
+          if (types in this.callbacks) {
+            this.callbacks[types].add(fn, data, one);
+
+            if (this.isMatched() && types === 'enter') {
+              this.callbacks[types].call(this);
             }
+          }
 
-            if (types == null) {
-                this.callbacks.enter.empty();
-                this.callbacks.leave.empty();
-            }
-            if (types in this.callbacks) {
-                if (fn) {
-                    this.callbacks[types].remove(fn);
-                } else {
-                    this.callbacks[types].empty();
-                }
+          return this;
+        }
+      }, {
+        key: 'one',
+        value: function one(
+
+          types, data, fn) {
+          return this.on(types, data, fn, 1);
+        }
+      }, {
+        key: 'off',
+        value: function off(
+
+          types, fn) {
+          var type = void 0;
+
+          if ((typeof types === 'undefined' ? 'undefined' : _typeof(types)) === 'object') {
+
+            for (type in types) {
+
+              if (types.hasOwnProperty(type)) {
+                this.off(type, types[type]);
+              }
             }
 
             return this;
-        },
+          }
 
-        isMatched: function() {
-            return this.mql.matches;
-        },
+          if (typeof types === 'undefined') {
+            this.callbacks.enter.empty();
+            this.callbacks.leave.empty();
+          } else if (types in this.callbacks) {
 
-        destory: function() {
-            this.off();
-        }
-    };
-    var Size = function(name, min, max, unit) {
-        this.name = name;
-        this.min = min ? min : 0;
-        this.max = max ? max : Infinity;
-
-        this.media = MediaBuilder.get(this.min, this.max, unit);
-
-        this.initialize.apply(this);
-
-        var self = this;
-        this.changeListener = function() {
-            if (self.isMatched()) {
-                ChangeEvent.trigger(self);
+            if (fn) {
+              this.callbacks[types].remove(fn);
+            } else {
+              this.callbacks[types].empty();
             }
-        };
-        if (this.isMatched()) {
-            ChangeEvent.current = this;
+          }
+
+          return this;
         }
-        this.mql.addListener(this.changeListener);
+      }, {
+        key: 'isMatched',
+        value: function isMatched() {
+          return this.mql.matches;
+        }
+      }, {
+        key: 'destory',
+        value: function destory() {
+          this.off();
+        }
+      }]);
+
+      return MediaQuery;
+    }();
+
+
+    var MediaBuilder = {
+      min: function min(_min, unit) {
+        return '(min-width: ' + _min + unit + ')';
+      },
+      max: function max(_max, unit) {
+        return '(max-width: ' + _max + unit + ')';
+      },
+      between: function between(min, max, unit) {
+        return '(min-width: ' + min + unit + ') and (max-width: ' + max + unit + ')';
+      },
+      get: function get(min, max) {
+        var unit = arguments.length <= 2 || arguments[2] === undefined ? 'px' : arguments[2];
+
+        if (min === null) {
+
+          return this.max(max, unit);
+        }
+
+        if (max === Infinity) {
+
+          return this.min(min, unit);
+        }
+
+        return this.between(min, max, unit);
+      }
     };
+    var Size = function(_MediaQuery) {
+      _inherits(Size, _MediaQuery);
 
-    Size.prototype = MediaQuery.prototype;
-    Size.prototype.constructor = Size;
+      function Size(name) { var min = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+        var max = arguments.length <= 2 || arguments[2] === undefined ? Infinity : arguments[2];
+        var unit = arguments.length <= 3 || arguments[3] === undefined ? 'px' : arguments[3];
+        _classCallCheck(this, Size);
+        var media = MediaBuilder.get(min, max, unit);
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Size).call(this,
+          name, media));
 
-    extend(Size.prototype, {
-        destory: function() {
-            this.off();
-            this.mql.removeListener(this.changeHander);
+        _this.min = min;
+        _this.max = max;
+
+        var that = _this;
+        _this.changeListener = function() {
+          if (that.isMatched()) {
+            ChangeEvent.trigger(that);
+          }
         }
-    });
+        ;
 
-    var UnionSize = function(names) {
-        this.name = names;
-        this.sizes = [];
+        if (_this.isMatched()) {
+          ChangeEvent.current = _this;
+        }
 
-        var self = this;
+        _this.mql.addListener(_this.changeListener);
 
+        return _this;
+      }
+
+      _createClass(Size, [{
+        key: 'destory',
+        value: function destory() {
+          this.off();
+          this.mql.removeListener(this.changeHander);
+        }
+      }]);
+
+      return Size;
+    }(MediaQuery);
+    var UnionSize = function(_MediaQuery2) {
+      _inherits(UnionSize, _MediaQuery2);
+
+      function UnionSize(names) {
+        _classCallCheck(this, UnionSize);
+        var sizes = [];
         var media = [];
-        each(names.split(' '), function(i, name) {
-            var size = Breakpoints.get(name);
+
+        util.each(names.split(' '),
+
+          function(i, name) {
+            var size = Breakpoints$1.get(name);
+
             if (size) {
-                self.sizes.push(size);
-                media.push(size.media);
+              sizes.push(size);
+              media.push(size.media);
             }
-        });
+          }
+        );
 
-        this.media = media.join(',');
+        return _possibleConstructorReturn(this, Object.getPrototypeOf(UnionSize).call(this,
 
-        this.initialize.apply(this);
-    };
+          names, media.join(',')));
+      }
 
-    UnionSize.prototype = MediaQuery.prototype;
-    UnionSize.prototype.constructor = UnionSize;
+      return UnionSize;
+    }(MediaQuery);
+
 
     var sizes = {};
     var unionSizes = {};
 
+    var Breakpoints = window.Breakpoints = function() {
+      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+      Breakpoints.define.apply(Breakpoints, args);
+    };
 
-    Breakpoints = extend(Breakpoints, {
-        defined: false,
-        define: function(values, options) {
-            if (this.defined) {
-                this.destory();
-            }
+    Breakpoints.defaults = defaults;
 
-            if (!values) {
-                values = Breakpoints.defaults;
-            }
+    Breakpoints = Object.assign(Breakpoints, {
+      defined: false,
+      define: function define(values) {
+        var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
-            this.options = extend(options || {}, {
-                unit: 'px'
-            });
-
-            for (var size in values) {
-                this.set(size, values[size].min, values[size].max, this.options.unit);
-            }
-
-            this.defined = true;
-        },
-
-        destory: function() {
-            each(sizes, function(name, size) {
-                size.destory();
-            });
-            sizes = {};
-            ChangeEvent.current = null;
-        },
-
-        is: function(size) {
-            var breakpoint = this.get(size);
-            if (!breakpoint) {
-                return null;
-            }
-
-            return breakpoint.isMatched();
-        },
-
-        /* get all size name */
-        all: function() {
-            var names = [];
-            each(sizes, function(name) {
-                names.push(name);
-            });
-            return names;
-        },
-
-        set: function(name, min, max, unit) {
-            var size = this.get(name);
-            if (size) {
-                size.destory();
-            }
-
-            sizes[name] = new Size(name, min || null, max || null, unit || null)
-            return sizes[name];
-        },
-
-        get: function(size) {
-            if (sizes.hasOwnProperty(size)) {
-                return sizes[size];
-            }
-
-            return null;
-        },
-
-        getUnion: function(sizes) {
-            if (unionSizes.hasOwnProperty(sizes)) {
-                return unionSizes[sizes];
-            }
-
-            unionSizes[sizes] = new UnionSize(sizes)
-
-            return unionSizes[sizes];
-        },
-
-        getMin: function(size) {
-            var obj = this.get(size);
-            if (obj) {
-                return obj.min;
-            }
-            return null;
-        },
-
-        getMax: function(size) {
-            var obj = this.get(size);
-            if (obj) {
-                return obj.max;
-            }
-            return null;
-        },
-
-        current: function() {
-            return ChangeEvent.current;
-        },
-
-        getMedia: function(size) {
-            var obj = this.get(size);
-            if (obj) {
-                return obj.media;
-            }
-            return null;
-        },
-
-        on: function(sizes, types, data, fn, /*INTERNAL*/ one) {
-            if (sizes === 'change') {
-                fn = data;
-                data = types;
-                return ChangeEvent.on(data, fn, one);
-            }
-            if (sizes.indexOf(' ')) {
-                var union = this.getUnion(sizes);
-
-                if (union) {
-                    union.on(types, data, fn, one);
-                }
-            } else {
-                var size = this.get(sizes);
-
-                if (size) {
-                    size.on(types, data, fn, one);
-                }
-            }
-
-            return this;
-        },
-
-        one: function(sizes, types, data, fn) {
-            return this.on(sizes, types, data, fn, 1);
-        },
-
-        off: function(sizes, types, fn) {
-            if (sizes === 'change') {
-                return ChangeEvent.off(types);
-            }
-
-            if (sizes.indexOf(' ')) {
-                var union = this.getUnion(sizes);
-
-                if (union) {
-                    union.off(types, fn);
-                }
-            } else {
-                var size = this.get(sizes);
-
-                if (size) {
-                    size.off(types, fn);
-                }
-            }
-
-            return this;
+        if (this.defined) {
+          this.destory();
         }
+
+        if (!values) {
+          values = Breakpoints.defaults;
+        }
+
+        this.options = Object.assign(options, {
+          unit: 'px'
+        });
+
+        for (var size in values) {
+
+          if (values.hasOwnProperty(size)) {
+            this.set(size, values[size].min, values[size].max, this.options.unit);
+          }
+        }
+
+        this.defined = true;
+      },
+
+      destory: function destory() {
+        util.each(sizes,
+
+          function(name, size) {
+            size.destory();
+          }
+        );
+        sizes = {};
+        ChangeEvent.current = null;
+      },
+
+      is: function is(size) {
+        var breakpoint = this.get(size);
+
+        if (!breakpoint) {
+
+          return null;
+        }
+
+        return breakpoint.isMatched();
+      },
+
+
+      all: function all() {
+        var names = [];
+        util.each(sizes,
+
+          function(name) {
+            names.push(name);
+          }
+        );
+
+        return names;
+      },
+
+      set: function set(name) {
+        var min = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+        var max = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
+        var unit = arguments.length <= 3 || arguments[3] === undefined ? null : arguments[3];
+        var size = this.get(name);
+
+        if (size) {
+          size.destory();
+        }
+
+        sizes[name] = new Size(name, min, max, unit);
+
+        return sizes[name];
+      },
+
+      get: function get(size) {
+        if (sizes.hasOwnProperty(size)) {
+
+          return sizes[size];
+        }
+
+        return null;
+      },
+
+      getUnion: function getUnion(sizes) {
+        if (unionSizes.hasOwnProperty(sizes)) {
+
+          return unionSizes[sizes];
+        }
+
+        unionSizes[sizes] = new UnionSize(sizes);
+
+        return unionSizes[sizes];
+      },
+
+      getMin: function getMin(size) {
+        var obj = this.get(size);
+
+        if (obj) {
+
+          return obj.min;
+        }
+
+        return null;
+      },
+
+      getMax: function getMax(size) {
+        var obj = this.get(size);
+
+        if (obj) {
+
+          return obj.max;
+        }
+
+        return null;
+      },
+
+      current: function current() {
+        return ChangeEvent.current;
+      },
+
+      getMedia: function getMedia(size) {
+        var obj = this.get(size);
+
+        if (obj) {
+
+          return obj.media;
+        }
+
+        return null;
+      },
+
+      on: function on(sizes, types, data, fn) {
+        var one = arguments.length <= 4 || arguments[4] === undefined ? false : arguments[4];
+        sizes = sizes.trim();
+
+        if (sizes === 'change') {
+          fn = data;
+          data = types;
+
+          return ChangeEvent.on(data, fn, one);
+        }
+
+        if (sizes.includes(' ')) {
+          var union = this.getUnion(sizes);
+
+          if (union) {
+            union.on(types, data, fn, one);
+          }
+        } else {
+          var size = this.get(sizes);
+
+          if (size) {
+            size.on(types, data, fn, one);
+          }
+        }
+
+        return this;
+      },
+
+      one: function one(sizes, types, data, fn) {
+        return this.on(sizes, types, data, fn, true);
+      },
+
+      off: function off(sizes, types, fn) {
+        sizes = sizes.trim();
+
+        if (sizes === 'change') {
+
+          return ChangeEvent.off(types);
+        }
+
+        if (sizes.includes(' ')) {
+          var union = this.getUnion(sizes);
+
+          if (union) {
+            union.off(types, fn);
+          }
+        } else {
+          var size = this.get(sizes);
+
+          if (size) {
+            size.off(types, fn);
+          }
+        }
+
+        return this;
+      }
     });
 
-})(document, window);
+
+    var Breakpoints$1 = Breakpoints;
+    exports.default = Breakpoints$1;
+  }
+);

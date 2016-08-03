@@ -1,30 +1,30 @@
-var Size = function(name, min, max, unit) {
-    this.name = name;
-    this.min = min ? min : 0;
-    this.max = max ? max : Infinity;
+import MediaQuery from './mediaQuery';
+import MediaBuilder from './mediaBuilder';
+import ChangeEvent from './changeEvent';
 
-    this.media = MediaBuilder.get(this.min, this.max, unit);
+export default class Size extends MediaQuery {
+  constructor(name, min = 0, max = Infinity, unit = 'px') {
+    let media = MediaBuilder.get(min, max, unit);
+    super(name, media);
 
-    this.initialize.apply(this);
+    this.min = min;
+    this.max = max;
 
-    var self = this;
-    this.changeListener = function() {
-        if (self.isMatched()) {
-            ChangeEvent.trigger(self);
-        }
+    const that = this;
+    this.changeListener = () => {
+      if (that.isMatched()) {
+        ChangeEvent.trigger(that);
+      }
     };
     if (this.isMatched()) {
-        ChangeEvent.current = this;
+      ChangeEvent.current = this;
     }
+
     this.mql.addListener(this.changeListener);
-};
+  }
 
-Size.prototype = MediaQuery.prototype;
-Size.prototype.constructor = Size;
-
-extend(Size.prototype, {
-    destory: function() {
-        this.off();
-        this.mql.removeListener(this.changeHander);
-    }
-});
+  destory() {
+    this.off();
+    this.mql.removeListener(this.changeHander);
+  }
+}
