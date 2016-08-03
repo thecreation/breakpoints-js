@@ -16,11 +16,11 @@
   "bugs": "https://github.com/amazingSurge/breakpoints.js/issues",
   "licenses": [
     {
-      "type": "GPL",
-      "url": "https://github.com/amazingSurge/breakpoints.js/blob/master/LICENSE-GPL"
+      "type": "LGPL",
+      "url": "https://github.com/amazingSurge/breakpoints.js/blob/master/LICENSE"
     }
   ],
-  "license": "MIT",
+  "license": "LGPL",
   "files": [
     "dist",
     "src"

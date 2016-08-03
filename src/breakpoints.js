@@ -10,7 +10,7 @@ let sizes = {};
 let unionSizes = {};
 
 let Breakpoints = window.Breakpoints = function(...args) {
-    Breakpoints.define.apply(Breakpoints, args);
+  Breakpoints.define.apply(Breakpoints, args);
 };
 
 Breakpoints.defaults = defaults;

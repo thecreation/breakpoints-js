@@ -4,7 +4,7 @@
   "description": "Breakpoints.js is a lightweight, pure javascript library for attaching cllbacks to breakoints.",
   "main": "dist/breakpoints.js",
   "copyright": "amazingSurge",
-  "license": "GPL",
+  "license": "LGPL",
   "ignore": [
     "**/.*",
     "node_modules",
