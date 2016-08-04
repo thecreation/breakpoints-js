@@ -31,7 +31,7 @@ export default class Callbacks {
     this.length = 0;
   }
 
-  call(caller, i, fn) {
+  call(caller, i, fn = null) {
     if (!i) {
       i = this.length - 1;
     }
@@ -49,7 +49,7 @@ export default class Callbacks {
     }
   }
 
-  fire(caller, fn) {
+  fire(caller, fn = null) {
     for (let i in this.list) {
       if(this.list.hasOwnProperty(i)){
         this.call(caller, i, fn);
