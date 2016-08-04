@@ -6,7 +6,7 @@ export default class Callbacks {
     this.list = [];
   }
 
-  add(fn, data = {}, one = false) {
+  add(fn, data, one = false) {
     this.list.push({
       fn,
       data: data,

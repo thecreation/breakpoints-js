@@ -35,10 +35,9 @@ export default class MediaQuery {
     this.mql.addListener(this.mqlListener);
   }
 
-  on(types, data, fn, /*INTERNAL*/ one = false) {
-    let type;
+  on(types, data, fn, one = false) {
     if (typeof types === 'object') {
-      for (type in types) {
+      for (let type in types) {
         if(types.hasOwnProperty(type)){
           this.on(type, data, types[type], one);
         }
@@ -56,6 +55,7 @@ export default class MediaQuery {
     }
 
     if (types in this.callbacks) {
+
       this.callbacks[types].add(fn, data, one);
       if (this.isMatched() && types === 'enter') {
         this.callbacks[types].call(this);
@@ -66,7 +66,7 @@ export default class MediaQuery {
   }
 
   one(types, data, fn) {
-    return this.on(types, data, fn, 1);
+    return this.on(types, data, fn, true);
   }
 
   off(types, fn) {
