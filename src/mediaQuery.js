@@ -54,13 +54,14 @@ export default class MediaQuery {
       return this;
     }
 
-    if (types in this.callbacks) {
-
+    if (typeof this.callbacks[types] !== 'undefined') {
       this.callbacks[types].add(fn, data, one);
-      if (this.isMatched() && types === 'enter') {
+
+      if (types === 'enter' && this.isMatched()) {
         this.callbacks[types].call(this);
       }
     }
+
 
     return this;
   }

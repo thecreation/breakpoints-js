@@ -60,6 +60,7 @@ describe('MediaQuery', () => {
 
       let data = {foo: 'bar'};
       let data2 = {bar: 'foo'};
+
       mediaQuery.on({
         enter: function(){},
         leave: function(){}
@@ -78,16 +79,16 @@ describe('MediaQuery', () => {
       let mediaQuery = new MediaQuery(name, media);
 
       mediaQuery.one({
-        enter: function(){}
+        leave: function(){}
       });
 
-      expect(mediaQuery.callbacks.enter.length).to.equal(1);
-      expect(mediaQuery.callbacks.enter.list[0].one).to.equal(true);
+      expect(mediaQuery.callbacks.leave.length).to.equal(1);
+      expect(mediaQuery.callbacks.leave.list[0].one).to.equal(true);
 
-      mediaQuery.one('enter', function(){});
+      mediaQuery.one('leave', function(){});
 
-      expect(mediaQuery.callbacks.enter.length).to.equal(2);
-      expect(mediaQuery.callbacks.enter.list[1].one).to.equal(true);
+      expect(mediaQuery.callbacks.leave.length).to.equal(2);
+      expect(mediaQuery.callbacks.leave.list[1].one).to.equal(true);
     });
   });
 
