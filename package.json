@@ -6,7 +6,7 @@
   "homepage": "https://github.com/amazingSurge/breakpoints.js",
   "author": {
     "name": "amazingSurge",
-    "email": "amazingSurge@yahoo.com",
+    "email": "amazingsurge@gmail.com",
     "url": "amazingSurge.com"
   },
   "repository": {
@@ -16,11 +16,11 @@
   "bugs": "https://github.com/amazingSurge/breakpoints.js/issues",
   "licenses": [
     {
-      "type": "LGPL",
+      "type": "LGPL-3.0",
       "url": "https://github.com/amazingSurge/breakpoints.js/blob/master/LICENSE"
     }
   ],
-  "license": "LGPL",
+  "license": "LGPL-3.0",
   "files": [
     "dist",
     "src"
