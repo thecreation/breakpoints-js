@@ -1,8 +1,8 @@
 /**
 * breakpoints.js
 * Breakpoints.js is a lightweight, pure javascript library for attaching callbacks to breakpoints.
-* Compiled: Thu Aug 04 2016 06:15:20 GMT+0800 (CST)
-* @version v1.0.1
+* Compiled: Tue Aug 09 2016 16:37:20 GMT+0800 (CST)
+* @version v1.0.2
 * @link https://github.com/amazingSurge/breakpoints.js
 * @copyright LGPL
 */
@@ -61,7 +61,7 @@ class Callbacks {
     this.list = [];
   }
 
-  add(fn, data = {}, one = false) {
+  add(fn, data, one = false) {
     this.list.push({
       fn,
       data: data,
@@ -86,7 +86,7 @@ class Callbacks {
     this.length = 0;
   }
 
-  call(caller, i, fn) {
+  call(caller, i, fn = null) {
     if (!i) {
       i = this.length - 1;
     }
@@ -104,7 +104,7 @@ class Callbacks {
     }
   }
 
-  fire(caller, fn) {
+  fire(caller, fn = null) {
     for (let i in this.list) {
       if(this.list.hasOwnProperty(i)){
         this.call(caller, i, fn);
@@ -181,10 +181,9 @@ class MediaQuery {
     this.mql.addListener(this.mqlListener);
   }
 
-  on(types, data, fn, /*INTERNAL*/ one = false) {
-    let type;
+  on(types, data, fn, one = false) {
     if (typeof types === 'object') {
-      for (type in types) {
+      for (let type in types) {
         if(types.hasOwnProperty(type)){
           this.on(type, data, types[type], one);
         }
@@ -201,18 +200,20 @@ class MediaQuery {
       return this;
     }
 
-    if (types in this.callbacks) {
+    if (typeof this.callbacks[types] !== 'undefined') {
       this.callbacks[types].add(fn, data, one);
-      if (this.isMatched() && types === 'enter') {
+
+      if (types === 'enter' && this.isMatched()) {
         this.callbacks[types].call(this);
       }
     }
+
 
     return this;
   }
 
   one(types, data, fn) {
-    return this.on(types, data, fn, 1);
+    return this.on(types, data, fn, true);
   }
 
   off(types, fn) {
@@ -251,17 +252,17 @@ class MediaQuery {
 }
 
 var MediaBuilder = {
-  min: function(min, unit) {
+  min: function(min, unit = 'px') {
     return `(min-width: ${min}${unit})`;
   },
-  max: function(max, unit) {
+  max: function(max, unit = 'px') {
     return `(max-width: ${max}${unit})`;
   },
-  between: function(min, max, unit) {
+  between: function(min, max, unit = 'px') {
     return `(min-width: ${min}${unit}) and (max-width: ${max}${unit})`;
   },
   get: function(min, max, unit = 'px') {
-    if (min === null) {
+    if (min === 0) {
       return this.max(max, unit);
     }
     if (max === Infinity) {
@@ -278,6 +279,7 @@ class Size extends MediaQuery {
 
     this.min = min;
     this.max = max;
+    this.unit = unit;
 
     const that = this;
     this.changeListener = () => {
@@ -374,7 +376,7 @@ Breakpoints = util.extend(Breakpoints, {
     return names;
   },
 
-  set: function(name, min = null, max = null, unit = null) {
+  set: function(name, min = 0, max = Infinity, unit = 'px') {
     let size = this.get(name);
     if (size) {
       size.destory();

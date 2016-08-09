@@ -65,7 +65,7 @@ Breakpoints = util.extend(Breakpoints, {
     return names;
   },
 
-  set: function(name, min = null, max = null, unit = null) {
+  set: function(name, min = 0, max = Infinity, unit = 'px') {
     let size = this.get(name);
     if (size) {
       size.destory();

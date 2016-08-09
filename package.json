@@ -2,7 +2,7 @@
   "name": "breakpoints.js",
   "title": "breakpoints.js",
   "description": "Breakpoints.js is a lightweight, pure javascript library for attaching callbacks to breakpoints.",
-  "version":"1.0.1",
+  "version":"1.0.2",
   "homepage": "https://github.com/amazingSurge/breakpoints.js",
   "author": {
     "name": "amazingSurge",

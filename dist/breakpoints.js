@@ -1,8 +1,8 @@
 /**
 * breakpoints.js
 * Breakpoints.js is a lightweight, pure javascript library for attaching callbacks to breakpoints.
-* Compiled: Thu Aug 04 2016 06:15:20 GMT+0800 (CST)
-* @version v1.0.1
+* Compiled: Tue Aug 09 2016 16:37:20 GMT+0800 (CST)
+* @version v1.0.2
 * @link https://github.com/amazingSurge/breakpoints.js
 * @copyright LGPL
 */
@@ -156,8 +156,7 @@
 
       _createClass(Callbacks, [{
         key: 'add',
-        value: function add(fn) {
-          var data = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+        value: function add(fn, data) {
           var one = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
 
           this.list.push({
@@ -188,7 +187,9 @@
         }
       }, {
         key: 'call',
-        value: function call(caller, i, fn) {
+        value: function call(caller, i) {
+          var fn = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
+
           if (!i) {
             i = this.length - 1;
           }
@@ -207,7 +208,9 @@
         }
       }, {
         key: 'fire',
-        value: function fire(caller, fn) {
+        value: function fire(caller) {
+          var fn = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+
           for (var i in this.list) {
 
             if (this.list.hasOwnProperty(i)) {
@@ -303,11 +306,9 @@
         value: function on(types, data, fn) {
           var one = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
 
-          var type = void 0;
-
           if ((typeof types === 'undefined' ? 'undefined' : _typeof(types)) === 'object') {
 
-            for (type in types) {
+            for (var type in types) {
 
               if (types.hasOwnProperty(type)) {
                 this.on(type, data, types[type], one);
@@ -327,10 +328,10 @@
             return this;
           }
 
-          if (types in this.callbacks) {
+          if (typeof this.callbacks[types] !== 'undefined') {
             this.callbacks[types].add(fn, data, one);
 
-            if (this.isMatched() && types === 'enter') {
+            if (types === 'enter' && this.isMatched()) {
               this.callbacks[types].call(this);
             }
           }
@@ -340,7 +341,7 @@
       }, {
         key: 'one',
         value: function one(types, data, fn) {
-          return this.on(types, data, fn, 1);
+          return this.on(types, data, fn, true);
         }
       }, {
         key: 'off',
@@ -389,19 +390,25 @@
     }();
 
     var MediaBuilder = {
-      min: function min(_min, unit) {
+      min: function min(_min) {
+        var unit = arguments.length <= 1 || arguments[1] === undefined ? 'px' : arguments[1];
+
         return '(min-width: ' + _min + unit + ')';
       },
-      max: function max(_max, unit) {
+      max: function max(_max) {
+        var unit = arguments.length <= 1 || arguments[1] === undefined ? 'px' : arguments[1];
+
         return '(max-width: ' + _max + unit + ')';
       },
-      between: function between(min, max, unit) {
+      between: function between(min, max) {
+        var unit = arguments.length <= 2 || arguments[2] === undefined ? 'px' : arguments[2];
+
         return '(min-width: ' + min + unit + ') and (max-width: ' + max + unit + ')';
       },
       get: function get(min, max) {
         var unit = arguments.length <= 2 || arguments[2] === undefined ? 'px' : arguments[2];
 
-        if (min === null) {
+        if (min === 0) {
 
           return this.max(max, unit);
         }
@@ -431,6 +438,7 @@
 
         _this.min = min;
         _this.max = max;
+        _this.unit = unit;
 
         var that = _this;
         _this.changeListener = function() {
@@ -560,9 +568,9 @@
 
 
       set: function set(name) {
-        var min = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
-        var max = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
-        var unit = arguments.length <= 3 || arguments[3] === undefined ? null : arguments[3];
+        var min = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+        var max = arguments.length <= 2 || arguments[2] === undefined ? Infinity : arguments[2];
+        var unit = arguments.length <= 3 || arguments[3] === undefined ? 'px' : arguments[3];
 
         var size = this.get(name);
 

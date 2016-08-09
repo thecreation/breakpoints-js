@@ -9,6 +9,7 @@ export default class Size extends MediaQuery {
 
     this.min = min;
     this.max = max;
+    this.unit = unit;
 
     const that = this;
     this.changeListener = () => {
