@@ -1,5 +1,5 @@
 /**
-* breakpoints-js v1.0.2
+* breakpoints-js v1.0.3
 * https://github.com/amazingSurge/breakpoints-js
 *
 * Copyright (c) amazingSurge
@@ -317,7 +317,7 @@ class UnionSize extends MediaQuery {
 }
 
 var info = {
-  version:"1.0.2"
+  version:"1.0.3"
 };
 
 let sizes = {};

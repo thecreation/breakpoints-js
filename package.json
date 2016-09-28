@@ -2,7 +2,7 @@
   "name": "breakpoints-js",
   "title": "breakpoints-js",
   "description": "Breakpoints-js is a lightweight, pure javascript library for attaching callbacks to breakpoints.",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "homepage": "https://github.com/amazingSurge/breakpoints-js",
   "author": {
     "name": "amazingSurge",
@@ -21,10 +21,12 @@
     "es6"
   ],
   "bugs": "https://github.com/amazingSurge/breakpoints-js/issues",
-  "licenses": [{
-    "type": "LGPL-3.0",
-    "url": "https://github.com/amazingSurge/breakpoints-js/blob/master/LICENSE"
-  }],
+  "licenses": [
+    {
+      "type": "LGPL-3.0",
+      "url": "https://github.com/amazingSurge/breakpoints-js/blob/master/LICENSE"
+    }
+  ],
   "license": "LGPL-3.0",
   "main": "dist/breakpoints.js",
   "files": [

@@ -5,7 +5,6 @@
 ## Table of contents
 - [Main files](#main-files)
 - [Quick start](#quick-start)
-- [Requirements](#requirements)
 - [Usage](#usage)
 - [Examples](#examples)
 - [Defaults](#defaults)
@@ -24,7 +23,7 @@ dist/
 ├── breakpoints.es.js
 └── breakpoints.min.js
 ```
-## Getting Started
+## Quick start
 Download the [production version][min] or the [development version][max].
 
 [min]: https://raw.github.com/amazingSurge/breakpoints-js/mster/dist/breakpoints.min.js
@@ -54,9 +53,6 @@ gulp build
 
 Done!
 
-## Requirements
-`breakpoints-js` requires the latest version of [`jQuery`](https://jquery.com/download/).
-
 ## Usage
 
 Before you try anything, you need to include breakpoints.js in your page.
@@ -73,6 +69,10 @@ Then you can init the script easily by code
     Breakpoints();
 </script>
 ```
+
+## Examples
+There are some example usages that you can look at to get started. They can be found in the
+[examples folder](https://github.com/amazingSurge/jquery-scrollTo/tree/master/examples).
 
 ## Defaults
 It will use the bootstrap media query breakpoints by default:
@@ -338,7 +338,7 @@ Licensed under [the LGPL license](LICENSE).
 
 [⬆ back to top](#table-of-contents)
 
-[bower-image]: https://img.shields.io/bower/v/breakpoints.js.svg?style=flat
+[bower-image]: https://img.shields.io/bower/v/breakpoints-js.svg?style=flat
 [bower-link]: https://david-dm.org/amazingSurge/breakpoints-js/dev-status.svg
 [npm-image]: https://badge.fury.io/js/breakpoints-js.svg?style=flat
 [npm-url]: https://npmjs.org/package/breakpoints-js
