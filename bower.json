@@ -1,5 +1,5 @@
 {
-  "name": "breakpoints-js",
+  "name": "breakpoints.js",
   "version": "1.0.3",
   "description": "Breakpoints-js is a lightweight, pure javascript library for attaching cllbacks to breakoints.",
   "main": "dist/breakpoints.js",

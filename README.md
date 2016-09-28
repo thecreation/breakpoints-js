@@ -31,7 +31,7 @@ Download the [production version][min] or the [development version][max].
 
 #### Install From Bower
 ```sh
-bower install breakpoints-js --save
+bower install breakpoints.js --save
 ```
 
 #### Install From Npm
@@ -72,7 +72,7 @@ Then you can init the script easily by code
 
 ## Examples
 There are some example usages that you can look at to get started. They can be found in the
-[examples folder](https://github.com/amazingSurge/jquery-scrollTo/tree/master/examples).
+[examples folder](https://github.com/amazingSurge/breakpoints-js/tree/master/examples).
 
 ## Defaults
 It will use the bootstrap media query breakpoints by default:
@@ -338,7 +338,7 @@ Licensed under [the LGPL license](LICENSE).
 
 [⬆ back to top](#table-of-contents)
 
-[bower-image]: https://img.shields.io/bower/v/breakpoints-js.svg?style=flat
+[bower-image]: https://img.shields.io/bower/v/breakpoints.js.svg?style=flat
 [bower-link]: https://david-dm.org/amazingSurge/breakpoints-js/dev-status.svg
 [npm-image]: https://badge.fury.io/js/breakpoints-js.svg?style=flat
 [npm-url]: https://npmjs.org/package/breakpoints-js
