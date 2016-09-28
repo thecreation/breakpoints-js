@@ -1,10 +1,9 @@
 /**
-* breakpoints.js
-* Breakpoints.js is a lightweight, pure javascript library for attaching callbacks to breakpoints.
-* Compiled: Tue Aug 09 2016 22:49:24 GMT+0800 (CST)
-* @version v1.0.2
-* @link https://github.com/amazingSurge/breakpoints.js
-* @copyright LGPL-3.0
+* breakpoints-js v1.0.2
+* https://github.com/amazingSurge/breakpoints-js
+*
+* Copyright (c) amazingSurge
+* Released under the LGPL-3.0 license
 */
 (function(global, factory) {
   if (typeof define === "function" && define.amd) {
@@ -495,6 +494,10 @@
       return UnionSize;
     }(MediaQuery);
 
+    var info = {
+      version: "1.0.2"
+    };
+
     var sizes = {};
     var unionSizes = {};
 
@@ -509,6 +512,7 @@
     Breakpoints.defaults = defaults;
 
     Breakpoints = util.extend(Breakpoints, {
+      version: info.version,
       defined: false,
       define: function define(values) {
         var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];

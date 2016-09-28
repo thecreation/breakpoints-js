@@ -12,12 +12,11 @@ export default {
       description: pkg.description,
       author: pkg.author,
       banner: `/**
-* ${pkg.title}
-* ${pkg.description}
-* Compiled: ${Date()}
-* @version v${pkg.version}
-* @link ${pkg.homepage}
-* @copyright ${pkg.license}
+* ${pkg.title} v${pkg.version}
+* ${pkg.homepage}
+*
+* Copyright (c) ${pkg.author.name}
+* Released under the ${pkg.license} license
 */
 `,
       // basic locations
@@ -29,6 +28,7 @@ export default {
 
       scripts: {
         entry: 'breakpoints.js',
+	version: 'info.js',
         files: '**/*.js',
         src: `${src}`,
         dest: `${dest}`,
@@ -45,7 +45,7 @@ export default {
 
       browser: {
         baseDir: './',
-        startPath: "demo/index.html",
+        startPath: "examples/index.html",
         browserPort: 3000,
         UIPort: 3001,
         testPort: 3002,
@@ -75,7 +75,7 @@ export default {
       this.dev = true;
     }
 
-    if(typeof this.deploy === 'undefined') {
+    if (typeof this.deploy === 'undefined') {
       this.deploy = false;
     }
 

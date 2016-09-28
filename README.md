@@ -1,31 +1,61 @@
-#[breakpoints.js](https://github.com/amazingSurge/breakpoints.js) ![bower][bower-image] [![devDependency status][devdeps-image]][devdeps-link]
+# [breakpoints-js](https://github.com/amazingSurge/breakpoints-js) ![bower][bower-image] [![NPM version][npm-image]][npm-url] [![Dependency Status][daviddm-image]][daviddm-url] [![prs-welcome]](#contributing)
 
-`breakpoints.js` is a lightweight, pure javascript library for attaching callbacks to breakpoints. 
+> `breakpoints-js` is a lightweight, pure javascript library for attaching callbacks to breakpoints. 
 
-##Getting breakpoints.js
+## Table of contents
+- [Main files](#main-files)
+- [Quick start](#quick-start)
+- [Requirements](#requirements)
+- [Usage](#usage)
+- [Examples](#examples)
+- [Defaults](#defaults)
+- [Methods](#methods)
+- [Browser support](#browser-support)
+- [Contributing](#contributing)
+- [Development](#development)
+- [Changelog](#changelog)
+- [Other Projects](#other-projects)
+- [Copyright and license](#copyright-and-license)
 
-###Download
+## Main files
+```
+dist/
+├── breakpoints.js
+├── breakpoints.es.js
+└── breakpoints.min.js
+```
+## Getting Started
+Download the [production version][min] or the [development version][max].
 
-Get the latest build, ready to go:
- 
- * [Development](https://raw.githubusercontent.com/amazingSurge/breakpoints.js/master/dist/breakpoints.js) - unminified
- * [Production](https://raw.githubusercontent.com/amazingSurge/breakpoints.js/master/dist/breakpoints.min.js) - minified
+[min]: https://raw.github.com/amazingSurge/breakpoints-js/mster/dist/breakpoints.min.js
+[max]: https://raw.github.com/amazingSurge/breakpoints-js/master/dist/breakpoints.js
+
+#### Install From Bower
+```sh
+bower install breakpoints-js --save
+```
+
+#### Install From Npm
+```sh
+npm install breakpoints-js --save
+```
 
 ###Build From Source
 
 If you want build from source:
 
-    git clone git@github.com:amazingSurge/breakpoints.js.git
-    cd breakpoints.js
-    npm install
-    npm install -g gulp-cli babel-cli
-    gulp build
+```sh
+git clone git@github.com:amazingSurge/breakpoints-js.git
+cd breakpoints-js
+npm install
+npm install -g gulp-cli babel-cli
+gulp build
+```
 
 Done!
 
-###Install From Bower
-
-    bower install breakpoints.js
+## Requirements
+`breakpoints-js` requires the latest version of [`jQuery`](https://jquery.com/download/).
 
 ## Usage
 
@@ -44,6 +74,7 @@ Then you can init the script easily by code
 </script>
 ```
 
+## Defaults
 It will use the bootstrap media query breakpoints by default:
 
 ```javascript
@@ -92,7 +123,7 @@ You can set up your own breakpoints when initialize it:
 </script>
 ```
 
-## API
+## Methods
 ### is
 
 Check if the current screen is a specific size.
@@ -246,18 +277,48 @@ Breakpoints.off('change', changeHandler);
 Breakpoints.off('change');
 ```
 
-## Bugs and feature requests
 
-Anyone and everyone is welcome to contribute. Please take a moment to
-review the [guidelines for contributing](CONTRIBUTING.md). Make sure you're using the latest version of breakpoints.js before submitting an issue.
+## Browser support
 
-* [Bug reports](CONTRIBUTING.md#bug-reports)
-* [Feature requests](CONTRIBUTING.md#feature-requests)
+Tested on all major browsers.
 
-## Browser Support
+| <img src="https://raw.githubusercontent.com/alrra/browser-logos/master/safari/safari_32x32.png" alt="Safari"> | <img src="https://raw.githubusercontent.com/alrra/browser-logos/master/chrome/chrome_32x32.png" alt="Chrome"> | <img src="https://raw.githubusercontent.com/alrra/browser-logos/master/firefox/firefox_32x32.png" alt="Firefox"> | <img src="https://raw.githubusercontent.com/alrra/browser-logos/master/edge/edge_32x32.png" alt="Edge"> | <img src="https://raw.githubusercontent.com/alrra/browser-logos/master/internet-explorer/internet-explorer_32x32.png" alt="IE"> | <img src="https://raw.githubusercontent.com/alrra/browser-logos/master/opera/opera_32x32.png" alt="Opera"> |
+|:--:|:--:|:--:|:--:|:--:|:--:|
+| Latest ✓ | Latest ✓ | Latest ✓ | Latest ✓ | 9-11 ✓ | Latest ✓ |
+
 
 - [`matchMedia` browser support](http://caniuse.com/#search=matchMedia) work perfect on all modern browsers (IE10+, firefox, chrome, android and safari).
 - With some polyfills (like the ones included in [matchMedia.js](https://github.com/paulirish/matchMedia.js/)) Breakpoints works perfect in IE6-9 as well.
+
+
+## Contributing
+Anyone and everyone is welcome to contribute. Please take a moment to
+review the [guidelines for contributing](CONTRIBUTING.md). Make sure you're using the latest version of `jquery-scrollTo` before submitting an issue. There are several ways to help out:
+
+* [Bug reports](CONTRIBUTING.md#bug-reports)
+* [Feature requests](CONTRIBUTING.md#feature-requests)
+* [Pull requests](CONTRIBUTING.md#pull-requests)
+* Write test cases for open bug issues
+* Contribute to the documentation
+
+## Development
+`jquery-scrollTo` is built modularly and uses Gulp as a build system to build its distributable files. To install the necessary dependencies for the build system, please run:
+
+```sh
+npm install -g gulp
+npm install -g babel-cli
+npm install
+```
+
+Then you can generate new distributable files from the sources, using:
+```
+gulp build
+```
+
+More gulp tasks can be found [here](CONTRIBUTING.md#available-tasks).
+
+## Changelog
+To see the list of recent changes, see [Releases section](https://github.com/amazingSurge/jquery-scrollTo/releases).
 
 
 ## Other Projects
@@ -269,16 +330,19 @@ If you like this project then I encourage you to check out a few of my other han
 - [strapPoint](https://github.com/dannynimmo/strapPoint) - A small jQuery utility plugin to make working with Bootstrap breakpoints easier.
 - [pointbreak.js](https://github.com/weblinc/pointbreak.js) - It provides a friendly interface to matchMedia with named media queries and easy to create callbacks.
 
-
 ## Copyright and license
 
-Copyright (C) 2015 amazingSurge.
+Copyright (C) 2016 amazingSurge.
 
 Licensed under [the LGPL license](LICENSE).
 
+[⬆ back to top](#table-of-contents)
 
 [bower-image]: https://img.shields.io/bower/v/breakpoints.js.svg?style=flat
-[bower-link]: https://david-dm.org/amazingSurge/breakpoints.js/dev-status.svg
-
-[devdeps-image]: https://img.shields.io/david/dev/amazingSurge/breakpoints.js.svg?style=flat
-[devdeps-link]: https://david-dm.org/amazingSurge/breakpoints.js#info=devDependencies
+[bower-link]: https://david-dm.org/amazingSurge/breakpoints-js/dev-status.svg
+[npm-image]: https://badge.fury.io/js/breakpoints-js.svg?style=flat
+[npm-url]: https://npmjs.org/package/breakpoints-js
+[license]: https://img.shields.io/npm/l/breakpoints-js.svg?style=flat
+[prs-welcome]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg
+[daviddm-image]: https://david-dm.org/amazingSurge/breakpoints-js.svg?style=flat
+[daviddm-url]: https://david-dm.org/amazingSurge/breakpoints-js

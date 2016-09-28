@@ -1,7 +1,7 @@
 {
-  "name": "breakpoints.js",
-  "version":"1.0.2",
-  "description": "Breakpoints.js is a lightweight, pure javascript library for attaching cllbacks to breakoints.",
+  "name": "breakpoints-js",
+  "version": "1.0.2",
+  "description": "Breakpoints-js is a lightweight, pure javascript library for attaching cllbacks to breakoints.",
   "main": "dist/breakpoints.js",
   "copyright": "amazingSurge",
   "license": "LGPL-3.0",
@@ -11,12 +11,16 @@
     "bower_components",
     "test",
     "demo",
-    "libs",
+    "gulp",
+    "CONTRIBUTING.md",
+    "manifest.json",
+    "karma.conf.js",
+    "config.js",
     "package.json",
     "gulpfile.babel.js",
     "tests"
   ],
-  "homepage": "https://github.com/amazingSurge/breakpoints.js",
+  "homepage": "https://github.com/amazingSurge/breakpoints-js",
   "authors": [
     "amazingSurge <amazingSurge@gmail.com>"
   ],

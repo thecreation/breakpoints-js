@@ -5,20 +5,22 @@ import gulp        from 'gulp';
 import config      from './config';
 
 // Tasks
-import clean              from './gulp/tasks/clean';
-import {bundler,scripts}  from './gulp/tasks/scripts';
-import * as lint          from './gulp/tasks/lint';
-import test               from './gulp/tasks/test';
-import * as deploy        from './gulp/tasks/deploy';
-import * as browser       from './gulp/tasks/browser';
-import archive            from './gulp/tasks/archive';
+import clean                     from './gulp/tasks/clean';
+import {version,bundler,scripts} from './gulp/tasks/scripts';
+import * as lint                 from './gulp/tasks/lint';
+import test                      from './gulp/tasks/test';
+import * as deploy               from './gulp/tasks/deploy';
+import * as browser              from './gulp/tasks/browser';
+import archive                   from './gulp/tasks/archive';
+import release                   from './gulp/tasks/release';
 
+gulp.task('version', version());
 gulp.task('bundler', bundler());
 gulp.task('scripts', scripts());
 gulp.task('clean', clean(config.scripts.dest));
 
 // Build the files
-gulp.task('build', gulp.series('clean', 'bundler', 'scripts'));
+gulp.task('build', gulp.series('clean', 'version', 'bundler', 'scripts'));
 
 // Lint Scripts
 gulp.task('lint:es:src', lint.es(config.scripts.src));
@@ -76,5 +78,8 @@ gulp.task('watch', () => {
   gulp.watch(config.scripts.src, gulp.series('scripts', 'reload'));
 });
 
+// Release task
+gulp.task('release', release());
+
 // Register default task
-gulp.task('default', gulp.series('serve'));
+gulp.task('default', gulp.series('lint:es:src', 'serve'));

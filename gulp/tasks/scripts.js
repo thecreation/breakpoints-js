@@ -17,6 +17,7 @@ import plumber      from 'gulp-plumber';
 import beautify     from '../util/beautify';
 import path         from 'path';
 import notify       from 'gulp-notify';
+import replace      from 'gulp-replace';
 
 export function bundler(src = config.scripts.src, dest = config.scripts.dest, entry = config.scripts.entry, files = config.scripts.files, message = 'Bundler task complete') {
   return function () {
@@ -87,4 +88,12 @@ export function scripts(src = config.scripts.src, dest = config.scripts.dest, en
         onLast: true
       }));
   };
+}
+
+export function version(src = config.scripts.src, file = config.scripts.version) {
+  return function() {
+    return gulp.src(path.join(src, file), {base: "./"})
+      .pipe(replace(/("{0,1}|'{0,1})version\1\s*:\s*("|')([\d.]+)\2/, `$1version$1:$2${config.version}$2`))
+      .pipe(gulp.dest("./", {overwrite: true}));
+  }
 }

@@ -5,6 +5,7 @@ import ChangeEvent from './changeEvent';
 import Size from './size';
 import UnionSize from './unionSize';
 import util from './util';
+import info from './info';
 
 let sizes = {};
 let unionSizes = {};
@@ -16,6 +17,7 @@ let Breakpoints = window.Breakpoints = function(...args) {
 Breakpoints.defaults = defaults;
 
 Breakpoints = util.extend(Breakpoints, {
+  version: info.version,
   defined: false,
   define(values, options = {}) {
     if (this.defined) {
