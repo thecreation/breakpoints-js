@@ -39,6 +39,11 @@ bower install breakpoints.js --save
 npm install breakpoints-js --save
 ```
 
+#### Install From Yarn
+```sh
+yarn add breakpoints-js
+```
+
 ###Build From Source
 
 If you want build from source:

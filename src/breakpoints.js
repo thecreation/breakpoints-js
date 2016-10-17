@@ -21,7 +21,7 @@ Breakpoints = util.extend(Breakpoints, {
   defined: false,
   define(values, options = {}) {
     if (this.defined) {
-      this.destory();
+      this.destroy();
     }
 
     if (!values) {
@@ -41,9 +41,9 @@ Breakpoints = util.extend(Breakpoints, {
     this.defined = true;
   },
 
-  destory() {
+  destroy() {
     util.each(sizes, (name, size) => {
-      size.destory();
+      size.destroy();
     });
     sizes = {};
     ChangeEvent.current = null;
@@ -70,7 +70,7 @@ Breakpoints = util.extend(Breakpoints, {
   set: function(name, min = 0, max = Infinity, unit = 'px') {
     let size = this.get(name);
     if (size) {
-      size.destory();
+      size.destroy();
     }
 
     sizes[name] = new Size(name, min, max, unit);

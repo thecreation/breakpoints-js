@@ -1,5 +1,5 @@
 /**
-* breakpoints-js v1.0.3
+* breakpoints-js v1.0.4
 * https://github.com/amazingSurge/breakpoints-js
 *
 * Copyright (c) amazingSurge
@@ -245,7 +245,7 @@ class MediaQuery {
     return this.mql.matches;
   }
 
-  destory() {
+  destroy() {
     this.off();
   }
 }
@@ -293,7 +293,7 @@ class Size extends MediaQuery {
     this.mql.addListener(this.changeListener);
   }
 
-  destory() {
+  destroy() {
     this.off();
     this.mql.removeListener(this.changeHander);
   }
@@ -317,7 +317,7 @@ class UnionSize extends MediaQuery {
 }
 
 var info = {
-  version:"1.0.3"
+  version:"1.0.4"
 };
 
 let sizes = {};
@@ -334,7 +334,7 @@ Breakpoints = util.extend(Breakpoints, {
   defined: false,
   define(values, options = {}) {
     if (this.defined) {
-      this.destory();
+      this.destroy();
     }
 
     if (!values) {
@@ -354,9 +354,9 @@ Breakpoints = util.extend(Breakpoints, {
     this.defined = true;
   },
 
-  destory() {
+  destroy() {
     util.each(sizes, (name, size) => {
-      size.destory();
+      size.destroy();
     });
     sizes = {};
     ChangeEvent.current = null;
@@ -383,7 +383,7 @@ Breakpoints = util.extend(Breakpoints, {
   set: function(name, min = 0, max = Infinity, unit = 'px') {
     let size = this.get(name);
     if (size) {
-      size.destory();
+      size.destroy();
     }
 
     sizes[name] = new Size(name, min, max, unit);

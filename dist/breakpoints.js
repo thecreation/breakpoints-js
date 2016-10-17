@@ -1,5 +1,5 @@
 /**
-* breakpoints-js v1.0.3
+* breakpoints-js v1.0.4
 * https://github.com/amazingSurge/breakpoints-js
 *
 * Copyright (c) amazingSurge
@@ -90,7 +90,7 @@
       :
 
       function(obj) {
-        return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj;
+        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
       };
 
     var defaults = {
@@ -156,7 +156,7 @@
       _createClass(Callbacks, [{
         key: 'add',
         value: function add(fn, data) {
-          var one = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+          var one = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
           this.list.push({
             fn: fn,
@@ -187,7 +187,7 @@
       }, {
         key: 'call',
         value: function call(caller, i) {
-          var fn = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
+          var fn = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
 
           if (!i) {
             i = this.length - 1;
@@ -208,7 +208,7 @@
       }, {
         key: 'fire',
         value: function fire(caller) {
-          var fn = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+          var fn = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
 
           for (var i in this.list) {
 
@@ -244,7 +244,7 @@
         return this.on(data, fn, true);
       },
       on: function on(data, fn) {
-        var one = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+        var one = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
         if (typeof fn === 'undefined' && util.isFunction(data)) {
           fn = data;
@@ -303,7 +303,7 @@
       }, {
         key: 'on',
         value: function on(types, data, fn) {
-          var one = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
+          var one = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
 
           if ((typeof types === 'undefined' ? 'undefined' : _typeof(types)) === 'object') {
 
@@ -379,8 +379,8 @@
           return this.mql.matches;
         }
       }, {
-        key: 'destory',
-        value: function destory() {
+        key: 'destroy',
+        value: function destroy() {
           this.off();
         }
       }]);
@@ -390,22 +390,22 @@
 
     var MediaBuilder = {
       min: function min(_min) {
-        var unit = arguments.length <= 1 || arguments[1] === undefined ? 'px' : arguments[1];
+        var unit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'px';
 
         return '(min-width: ' + _min + unit + ')';
       },
       max: function max(_max) {
-        var unit = arguments.length <= 1 || arguments[1] === undefined ? 'px' : arguments[1];
+        var unit = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'px';
 
         return '(max-width: ' + _max + unit + ')';
       },
       between: function between(min, max) {
-        var unit = arguments.length <= 2 || arguments[2] === undefined ? 'px' : arguments[2];
+        var unit = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'px';
 
         return '(min-width: ' + min + unit + ') and (max-width: ' + max + unit + ')';
       },
       get: function get(min, max) {
-        var unit = arguments.length <= 2 || arguments[2] === undefined ? 'px' : arguments[2];
+        var unit = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'px';
 
         if (min === 0) {
 
@@ -425,15 +425,15 @@
       _inherits(Size, _MediaQuery);
 
       function Size(name) {
-        var min = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
-        var max = arguments.length <= 2 || arguments[2] === undefined ? Infinity : arguments[2];
-        var unit = arguments.length <= 3 || arguments[3] === undefined ? 'px' : arguments[3];
+        var min = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+        var max = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : Infinity;
+        var unit = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'px';
 
         _classCallCheck(this, Size);
 
         var media = MediaBuilder.get(min, max, unit);
 
-        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Size).call(this, name, media));
+        var _this = _possibleConstructorReturn(this, (Size.__proto__ || Object.getPrototypeOf(Size)).call(this, name, media));
 
         _this.min = min;
         _this.max = max;
@@ -457,8 +457,8 @@
       }
 
       _createClass(Size, [{
-        key: 'destory',
-        value: function destory() {
+        key: 'destroy',
+        value: function destroy() {
           this.off();
           this.mql.removeListener(this.changeHander);
         }
@@ -488,14 +488,14 @@
           }
         );
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(UnionSize).call(this, names, media.join(',')));
+        return _possibleConstructorReturn(this, (UnionSize.__proto__ || Object.getPrototypeOf(UnionSize)).call(this, names, media.join(',')));
       }
 
       return UnionSize;
     }(MediaQuery);
 
     var info = {
-      version: "1.0.3"
+      version: "1.0.4"
     };
 
     var sizes = {};
@@ -515,10 +515,10 @@
       version: info.version,
       defined: false,
       define: function define(values) {
-        var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
         if (this.defined) {
-          this.destory();
+          this.destroy();
         }
 
         if (!values) {
@@ -538,11 +538,11 @@
 
         this.defined = true;
       },
-      destory: function destory() {
+      destroy: function destroy() {
         util.each(sizes,
 
           function(name, size) {
-            size.destory();
+            size.destroy();
           }
         );
         sizes = {};
@@ -572,14 +572,14 @@
 
 
       set: function set(name) {
-        var min = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
-        var max = arguments.length <= 2 || arguments[2] === undefined ? Infinity : arguments[2];
-        var unit = arguments.length <= 3 || arguments[3] === undefined ? 'px' : arguments[3];
+        var min = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+        var max = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : Infinity;
+        var unit = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'px';
 
         var size = this.get(name);
 
         if (size) {
-          size.destory();
+          size.destroy();
         }
 
         sizes[name] = new Size(name, min, max, unit);
@@ -640,7 +640,7 @@
         return null;
       },
       on: function on(sizes, types, data, fn) {
-        var one = arguments.length <= 4 || arguments[4] === undefined ? false : arguments[4];
+        var one = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
 
         sizes = sizes.trim();
 

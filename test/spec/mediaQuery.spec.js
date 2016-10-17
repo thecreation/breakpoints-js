@@ -173,7 +173,7 @@ describe('MediaQuery', () => {
     });
   });
 
-  describe('mediaQuery.destory()', () => {
+  describe('mediaQuery.destroy()', () => {
     it('should be act as off()', () => {
       let mediaQuery = new MediaQuery(name, media);
 
@@ -182,7 +182,7 @@ describe('MediaQuery', () => {
         leave: function(){}
       });
 
-      mediaQuery.destory();
+      mediaQuery.destroy();
 
       expect(mediaQuery.callbacks.enter.length).to.equal(0);
       expect(mediaQuery.callbacks.leave.length).to.equal(0);

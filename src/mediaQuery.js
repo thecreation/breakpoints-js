@@ -100,7 +100,7 @@ export default class MediaQuery {
     return this.mql.matches;
   }
 
-  destory() {
+  destroy() {
     this.off();
   }
 }
