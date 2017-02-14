@@ -26,7 +26,7 @@ dist/
 ## Quick start
 Download the [production version][min] or the [development version][max].
 
-[min]: https://raw.github.com/amazingSurge/breakpoints-js/mster/dist/breakpoints.min.js
+[min]: https://raw.github.com/amazingSurge/breakpoints-js/master/dist/breakpoints.min.js
 [max]: https://raw.github.com/amazingSurge/breakpoints-js/master/dist/breakpoints.js
 
 #### Install From Bower
