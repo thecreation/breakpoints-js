@@ -1,5 +1,3 @@
-'use strict';
-
 import defaults from './defaults';
 import ChangeEvent from './changeEvent';
 import Size from './size';

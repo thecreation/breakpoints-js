@@ -1,5 +1,3 @@
-'use strict';
-
 export default {
   min: function(min, unit = 'px') {
     return `(min-width: ${min}${unit})`;

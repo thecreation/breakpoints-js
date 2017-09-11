@@ -1,5 +1,3 @@
-'use strict';
-
 import Callbacks from './callbacks';
 import util from './util';
 
