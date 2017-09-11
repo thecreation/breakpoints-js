@@ -2,7 +2,7 @@
   "name": "breakpoints-js",
   "title": "breakpoints-js",
   "description": "Breakpoints-js is a lightweight, pure javascript library for attaching callbacks to breakpoints.",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "homepage": "https://github.com/amazingSurge/breakpoints-js",
   "author": {
     "name": "amazingSurge",
@@ -29,6 +29,7 @@
   ],
   "license": "LGPL-3.0",
   "main": "dist/breakpoints.js",
+  "module": "dist/breakpoints.es.js",
   "files": [
     "dist",
     "src"
@@ -43,7 +44,6 @@
     "test": "gulp test"
   },
   "devDependencies": {
-    "argv": "*",
     "babel-core": "*",
     "babel-eslint": "*",
     "babel-istanbul": "*",
@@ -54,7 +54,6 @@
     "browser-sync": "*",
     "chai": "*",
     "del": "*",
-    "esformatter": "*",
     "graceful-fs": "*",
     "gulp": "github:gulpjs/gulp#4.0",
     "gulp-babel": "*",
@@ -64,7 +63,7 @@
     "gulp-filter": "*",
     "gulp-header": "*",
     "gulp-if": "*",
-    "gulp-jshint": "*",
+    "gulp-nf-prettier": "*",
     "gulp-notify": "*",
     "gulp-plumber": "*",
     "gulp-rename": "*",
@@ -76,7 +75,6 @@
     "gulp-util": "*",
     "gulp-zip": "*",
     "inquirer": "*",
-    "jshint": "*",
     "karma": "*",
     "karma-babel-preprocessor": "*",
     "karma-chrome-launcher": "*",
@@ -94,12 +92,15 @@
     "node-notifier": "*",
     "path-exists": "*",
     "phantomjs-prebuilt": "*",
+    "prettier": "*",
     "release-it": "*",
     "rollup-plugin-babel": "*",
     "rollup-plugin-istanbul": "*",
+    "semver": "*",
     "sinon": "*",
     "sinon-chai": "*",
-    "through2": "*"
+    "through2": "*",
+    "yargs": "*"
   },
   "engines": {
     "node": ">= 6.2.2",

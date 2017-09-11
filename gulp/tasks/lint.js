@@ -3,7 +3,6 @@
 import config      from '../../config';
 import gulp        from 'gulp';
 import eslint      from 'gulp-eslint';
-import jshint      from 'gulp-jshint';
 import getSrcFiles from '../util/getSrcFiles';
 
 export function es(src = config.scripts.src, options = {}, files = ['**/*.js', '!**/*.min.js']) {
@@ -23,14 +22,3 @@ export function es(src = config.scripts.src, options = {}, files = ['**/*.js', '
   };
 }
 
-export function js(src = config.scripts.src, files = ['**/*.js', '!**/*.min.js']) {
-  return function() {
-    let srcFiles = getSrcFiles(src, files);
-
-    return gulp.src(srcFiles)
-      .pipe(jshint({
-        lookup: true
-      }))
-      .pipe(jshint.reporter('default'));
-  };
-}

@@ -1,7 +1,9 @@
 'use strict';
 
 import fs from 'graceful-fs';
-import minimist from 'minimist';
+import {argv} from 'yargs';
+
+const production = argv.production || argv.prod || false;
 
 export default {
   getConfig: function(pkg, src, dest) {
@@ -9,6 +11,7 @@ export default {
       version: pkg.version,
       name: pkg.name,
       title: pkg.title,
+      filename: 'breakpoints',
       description: pkg.description,
       author: pkg.author,
       banner: `/**
@@ -27,8 +30,8 @@ export default {
       },
 
       scripts: {
-        entry: 'breakpoints.js',
-	version: 'info.js',
+        input: 'breakpoints.js',
+        version: 'info.js',
         files: '**/*.js',
         src: `${src}`,
         dest: `${dest}`,
@@ -51,8 +54,22 @@ export default {
         testPort: 3002,
       },
 
+      deploy: {
+        versionFiles: ['package.json', 'bower.json'],
+        increment: "patch", // major, minor, patch, premajor, preminor, prepatch, or prerelease.
+      },
+
       notify: {
         title: pkg.title
+      },
+      
+      env: 'development',
+      production: production,
+      setEnv: function(env) {
+        if (typeof env !== 'string') return;
+        this.env = env;
+        this.production = env === 'production';
+        process.env.NODE_ENV = env;
       },
 
       test: {},
@@ -62,27 +79,11 @@ export default {
   init: function() {
     const pkg = JSON.parse(fs.readFileSync('./package.json', { encoding: 'utf-8' }));
 
-    Object.assign(this, {
-      args: minimist(process.argv.slice(2), {
-        string: 'env',
-        default: {
-          env: process.env.NODE_ENV || 'dev'
-        }
-      })
-    });
-
-    if (this.args.env === 'dev') {
-      this.dev = true;
-    }
-
-    if (typeof this.deploy === 'undefined') {
-      this.deploy = false;
-    }
-
     let src = 'src';
     let dest = 'dist';
 
-    Object.assign(this, this.getConfig(pkg, src, dest));
+    Object.assign(this, this.getConfig(pkg, src, dest, production));
+    this.setEnv(production? 'production': 'development');
 
     return this;
   }
