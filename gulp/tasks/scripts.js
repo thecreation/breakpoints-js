@@ -14,7 +14,7 @@ import rollup       from 'gulp-rollup';
 import uglify       from 'gulp-uglify';
 import size         from 'gulp-size';
 import plumber      from 'gulp-plumber';
-import prettier      from 'gulp-nf-prettier';
+import prettier     from 'gulp-nf-prettier';
 import path         from 'path';
 import notify       from 'gulp-notify';
 import replace      from 'gulp-replace';
