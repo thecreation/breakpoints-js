@@ -26,6 +26,6 @@ export default class Size extends MediaQuery {
 
   destroy() {
     this.off();
-    this.mql.removeListener(this.changeHander);
+    this.mql.removeListener(this.changeListener);
   }
 }

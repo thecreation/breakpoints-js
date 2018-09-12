@@ -1,10 +1,10 @@
 /**
-* breakpoints-js v1.0.5
-* https://github.com/amazingSurge/breakpoints-js
-*
-* Copyright (c) amazingSurge
-* Released under the LGPL-3.0 license
-*/
+ * breakpoints-js v1.0.6
+ * https://github.com/amazingSurge/breakpoints-js
+ *
+ * Copyright (c) amazingSurge
+ * Released under the LGPL-3.0 license
+ */
 (function(global, factory) {
   if (typeof define === 'function' && define.amd) {
     define(['exports'], factory);
@@ -89,20 +89,20 @@
         }
       : function(obj) {
           return obj &&
-          typeof Symbol === 'function' &&
-          obj.constructor === Symbol &&
-          obj !== Symbol.prototype
+            typeof Symbol === 'function' &&
+            obj.constructor === Symbol &&
+            obj !== Symbol.prototype
             ? 'symbol'
             : typeof obj;
         };
 
   /**
-  * breakpoints-js v1.0.5
-  * https://github.com/amazingSurge/breakpoints-js
-  *
-  * Copyright (c) amazingSurge
-  * Released under the LGPL-3.0 license
-  */
+   * breakpoints-js v1.0.6
+   * https://github.com/amazingSurge/breakpoints-js
+   *
+   * Copyright (c) amazingSurge
+   * Released under the LGPL-3.0 license
+   */
   var defaults = {
     // Extra small devices (phones)
     xs: {
@@ -125,8 +125,6 @@
       max: Infinity
     }
   };
-
-  ('use strict');
 
   var util = {
     each: function each(obj, fn) {
@@ -247,8 +245,6 @@
 
     return Callbacks;
   })();
-
-  ('use strict');
 
   var ChangeEvent = {
     current: null,
@@ -425,8 +421,6 @@
     return MediaQuery;
   })();
 
-  ('use strict');
-
   var MediaBuilder = {
     min: function min(_min) {
       var unit =
@@ -517,7 +511,7 @@
         key: 'destroy',
         value: function destroy() {
           this.off();
-          this.mql.removeListener(this.changeHander);
+          this.mql.removeListener(this.changeListener);
         }
       }
     ]);
@@ -544,8 +538,11 @@
 
       return _possibleConstructorReturn(
         this,
-        (UnionSize.__proto__ || Object.getPrototypeOf(UnionSize))
-          .call(this, names, media.join(','))
+        (UnionSize.__proto__ || Object.getPrototypeOf(UnionSize)).call(
+          this,
+          names,
+          media.join(',')
+        )
       );
     }
 
@@ -553,10 +550,8 @@
   })(MediaQuery);
 
   var info = {
-    version: '1.0.5'
+    version: '1.0.6'
   };
-
-  ('use strict');
 
   var sizes = {};
   var unionSizes = {};

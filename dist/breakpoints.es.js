@@ -1,5 +1,5 @@
 /**
-* breakpoints-js v1.0.5
+* breakpoints-js v1.0.6
 * https://github.com/amazingSurge/breakpoints-js
 *
 * Copyright (c) amazingSurge
@@ -27,8 +27,6 @@ var defaults = {
     max: Infinity
   }
 };
-
-'use strict';
 
 var util = {
   each: function(obj, fn) {
@@ -113,8 +111,6 @@ class Callbacks {
     }
   }
 }
-
-'use strict';
 
 var ChangeEvent = {
   current: null,
@@ -254,8 +250,6 @@ class MediaQuery {
   }
 }
 
-'use strict';
-
 var MediaBuilder = {
   min: function(min, unit = 'px') {
     return `(min-width: ${min}${unit})`;
@@ -301,7 +295,7 @@ class Size extends MediaQuery {
 
   destroy() {
     this.off();
-    this.mql.removeListener(this.changeHander);
+    this.mql.removeListener(this.changeListener);
   }
 }
 
@@ -323,10 +317,8 @@ class UnionSize extends MediaQuery {
 }
 
 var info = {
-  version:"1.0.5"
+  version:"1.0.6"
 };
-
-'use strict';
 
 let sizes = {};
 let unionSizes = {};

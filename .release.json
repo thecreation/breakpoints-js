@@ -7,6 +7,7 @@
   "tagName": "v%s",
   "tagAnnotation": "Release v%s",
   "buildCommand": "gulp build",
+  "requireCleanWorkingDir": "false",
   "npm": {
     "publish": true
   }

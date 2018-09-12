@@ -16,6 +16,6 @@ export default function release() {
   config.setEnv('production');
 
   return function(done) {
-    releaseIt.execute(options).catch(handleErrors).finally(done);
+    releaseIt(options).then(done).catch(handleErrors);
   }
 }
