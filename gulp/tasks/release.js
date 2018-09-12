@@ -12,7 +12,7 @@ export default function release() {
   options.debug = argv.debug || false;
   options.force = argv.force || false;
   options['dry-run'] = argv['dry-run'] || false;
-
+  options.requireCleanWorkingDir = false;
   config.setEnv('production');
 
   return function(done) {
